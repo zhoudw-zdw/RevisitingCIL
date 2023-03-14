@@ -14,7 +14,14 @@
 </div>
 </div>
 
-The code repository for "Revisiting Class-Incremental Learning with Pre-Trained Models: Generalizability and Adaptivity are All You Need" in PyTorch. 
+The code repository for "[Revisiting Class-Incremental Learning with Pre-Trained Models: Generalizability and Adaptivity are All You Need](http://arxiv.org/abs/2303.07338)" in PyTorch.  If you use any content of this repo for your work, please cite the following bib entry: 
+
+    @article{zhou2023revisiting,
+        author = {Zhou, Da-Wei and Ye, Han-Jia and Zhan, De-Chuan and Liu, Ziwei},
+        title = {Revisiting Class-Incremental Learning with Pre-Trained Models: Generalizability and Adaptivity are All You Need},
+        journal = {arXiv preprint arXiv:2303.07338},
+        year = {2023}
+    }
 
 
 
