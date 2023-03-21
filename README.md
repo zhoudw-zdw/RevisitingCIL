@@ -86,6 +86,6 @@ If you have any questions, please contact me via [email](mailto:zhoudw@lamda.nju
 
 <div align="center">
 
-![visitors](https://visitor-badge.glitch.me/badge?page_id=zhoudw-zdw.RevisitingCIL&left_color=green&right_color=red)
+![visitors](https://visitor-badge.laobi.icu/badge?page_id=zhoudw-zdw.RevisitingCIL&left_color=green&right_color=red)
 
 </div>
