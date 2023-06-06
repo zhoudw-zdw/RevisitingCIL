@@ -1,0 +1,27 @@
+2023-06-06 01:31:12,971 [trainer.py] => config: ./exps/adam_vpt_shallow.json
+2023-06-06 01:31:12,971 [trainer.py] => prefix:  
+2023-06-06 01:31:12,971 [trainer.py] => dataset: cifar224
+2023-06-06 01:31:12,971 [trainer.py] => memory_size: 0
+2023-06-06 01:31:12,971 [trainer.py] => memory_per_class: 0
+2023-06-06 01:31:12,971 [trainer.py] => fixed_memory: False
+2023-06-06 01:31:12,972 [trainer.py] => shuffle: True
+2023-06-06 01:31:12,972 [trainer.py] => init_cls: 10
+2023-06-06 01:31:12,972 [trainer.py] => increment: 10
+2023-06-06 01:31:12,972 [trainer.py] => model_name: adam_vpt
+2023-06-06 01:31:12,972 [trainer.py] => convnet_type: pretrained_vit_b16_224_in21k_vpt
+2023-06-06 01:31:12,972 [trainer.py] => device: [device(type='cuda', index=1)]
+2023-06-06 01:31:12,972 [trainer.py] => seed: 1993
+2023-06-06 01:31:12,972 [trainer.py] => tuned_epoch: 50
+2023-06-06 01:31:12,972 [trainer.py] => init_lr: 0.01
+2023-06-06 01:31:12,972 [trainer.py] => batch_size: 24
+2023-06-06 01:31:12,972 [trainer.py] => weight_decay: 0.0005
+2023-06-06 01:31:12,972 [trainer.py] => min_lr: 0
+2023-06-06 01:31:12,972 [trainer.py] => optimizer: sgd
+2023-06-06 01:31:12,972 [trainer.py] => vpt_type: shallow
+2023-06-06 01:31:12,972 [trainer.py] => prompt_token_num: 5
+2023-06-06 01:31:14,095 [data_manager.py] => [68, 56, 78, 8, 23, 84, 90, 65, 74, 76, 40, 89, 3, 92, 55, 9, 26, 80, 43, 38, 58, 70, 77, 1, 85, 19, 17, 50, 28, 53, 13, 81, 45, 82, 6, 59, 83, 16, 15, 44, 91, 41, 72, 60, 79, 52, 20, 10, 31, 54, 37, 95, 14, 71, 96, 98, 97, 2, 64, 66, 42, 22, 35, 86, 24, 34, 87, 21, 99, 0, 88, 27, 18, 94, 11, 12, 47, 25, 30, 46, 62, 69, 36, 61, 7, 63, 75, 5, 32, 4, 51, 48, 73, 93, 39, 67, 29, 49, 57, 33]
+2023-06-06 01:31:15,377 [_builder.py] => Loading pretrained weights from Hugging Face hub (timm/vit_base_patch16_224.augreg_in21k)
+2023-06-06 01:31:15,482 [_hub.py] => [timm/vit_base_patch16_224.augreg_in21k] Safe alternative available for 'pytorch_model.bin' (as 'model.safetensors'). Loading weights using safetensors.
+2023-06-06 01:31:16,218 [trainer.py] => All params: 85802496
+2023-06-06 01:31:16,219 [trainer.py] => Trainable params: 3840
+2023-06-06 01:31:16,560 [adam_vpt.py] => Learning on 0-10

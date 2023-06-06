@@ -1,0 +1,48 @@
+2023-06-06 01:30:09,147 [trainer.py] => config: ./exps/adam_ssf.json
+2023-06-06 01:30:09,147 [trainer.py] => prefix:  
+2023-06-06 01:30:09,147 [trainer.py] => dataset: cifar224
+2023-06-06 01:30:09,147 [trainer.py] => memory_size: 0
+2023-06-06 01:30:09,147 [trainer.py] => memory_per_class: 0
+2023-06-06 01:30:09,147 [trainer.py] => fixed_memory: False
+2023-06-06 01:30:09,147 [trainer.py] => shuffle: True
+2023-06-06 01:30:09,147 [trainer.py] => init_cls: 10
+2023-06-06 01:30:09,147 [trainer.py] => increment: 10
+2023-06-06 01:30:09,147 [trainer.py] => model_name: adam_ssf
+2023-06-06 01:30:09,147 [trainer.py] => convnet_type: pretrained_vit_b16_224_in21k_ssf
+2023-06-06 01:30:09,147 [trainer.py] => device: [device(type='cuda', index=1)]
+2023-06-06 01:30:09,147 [trainer.py] => seed: 1993
+2023-06-06 01:30:09,147 [trainer.py] => tuned_epoch: 20
+2023-06-06 01:30:09,147 [trainer.py] => init_lr: 0.01
+2023-06-06 01:30:09,147 [trainer.py] => batch_size: 48
+2023-06-06 01:30:09,147 [trainer.py] => weight_decay: 0.0005
+2023-06-06 01:30:09,147 [trainer.py] => min_lr: 0
+2023-06-06 01:30:09,147 [trainer.py] => ffn_num: 64
+2023-06-06 01:30:09,147 [trainer.py] => optimizer: sgd
+2023-06-06 01:30:09,147 [trainer.py] => vpt_type: shallow
+2023-06-06 01:30:09,147 [trainer.py] => prompt_token_num: 5
+Files already downloaded and verified
+Files already downloaded and verified
+2023-06-06 01:30:10,297 [data_manager.py] => [68, 56, 78, 8, 23, 84, 90, 65, 74, 76, 40, 89, 3, 92, 55, 9, 26, 80, 43, 38, 58, 70, 77, 1, 85, 19, 17, 50, 28, 53, 13, 81, 45, 82, 6, 59, 83, 16, 15, 44, 91, 41, 72, 60, 79, 52, 20, 10, 31, 54, 37, 95, 14, 71, 96, 98, 97, 2, 64, 66, 42, 22, 35, 86, 24, 34, 87, 21, 99, 0, 88, 27, 18, 94, 11, 12, 47, 25, 30, 46, 62, 69, 36, 61, 7, 63, 75, 5, 32, 4, 51, 48, 73, 93, 39, 67, 29, 49, 57, 33]
+This is for the BaseNet initialization.
+Traceback (most recent call last):
+  File "/people/cs/o/oxx220000/RevisitingCIL/main.py", line 24, in <module>
+    main()
+  File "/people/cs/o/oxx220000/RevisitingCIL/main.py", line 10, in main
+    train(args)
+  File "/people/cs/o/oxx220000/RevisitingCIL/trainer.py", line 18, in train
+    _train(args)
+  File "/people/cs/o/oxx220000/RevisitingCIL/trainer.py", line 57, in _train
+    model = factory.get_model(args["model_name"], args)
+  File "/people/cs/o/oxx220000/RevisitingCIL/utils/factory.py", line 11, in get_model
+    return Learner(args)
+  File "/people/cs/o/oxx220000/RevisitingCIL/models/adam_ssf.py", line 29, in __init__
+    self._network = SimpleVitNet(args, True)
+  File "/people/cs/o/oxx220000/RevisitingCIL/utils/inc_net.py", line 530, in __init__
+    super().__init__(args, pretrained)
+  File "/people/cs/o/oxx220000/RevisitingCIL/utils/inc_net.py", line 177, in __init__
+    self.convnet = get_convnet(args, pretrained)
+  File "/people/cs/o/oxx220000/RevisitingCIL/utils/inc_net.py", line 47, in get_convnet
+    from convs import vision_transformer_ssf
+  File "/people/cs/o/oxx220000/RevisitingCIL/convs/vision_transformer_ssf.py", line 36, in <module>
+    from timm.models.layers.helpers import to_2tuple
+ModuleNotFoundError: No module named 'timm.models.layers.helpers'

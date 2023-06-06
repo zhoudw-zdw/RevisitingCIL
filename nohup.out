@@ -1,0 +1,171 @@
+2023-06-06 00:59:24,686 [trainer.py] => config: ./exps/simplecil_cifar10.json
+2023-06-06 00:59:24,686 [trainer.py] => prefix:  
+2023-06-06 00:59:24,686 [trainer.py] => dataset: cifar10
+2023-06-06 00:59:24,686 [trainer.py] => memory_size: 0
+2023-06-06 00:59:24,686 [trainer.py] => memory_per_class: 0
+2023-06-06 00:59:24,686 [trainer.py] => fixed_memory: False
+2023-06-06 00:59:24,686 [trainer.py] => shuffle: True
+2023-06-06 00:59:24,687 [trainer.py] => init_cls: 10
+2023-06-06 00:59:24,687 [trainer.py] => increment: 10
+2023-06-06 00:59:24,687 [trainer.py] => model_name: simplecil
+2023-06-06 00:59:24,687 [trainer.py] => convnet_type: pretrained_vit_b16_224_in21k
+2023-06-06 00:59:24,687 [trainer.py] => device: [device(type='cuda', index=0)]
+2023-06-06 00:59:24,687 [trainer.py] => seed: 1993
+2023-06-06 00:59:24,687 [trainer.py] => tuned_epoch: 0
+2023-06-06 00:59:24,687 [trainer.py] => init_lr: 0.01
+2023-06-06 00:59:24,687 [trainer.py] => batch_size: 256
+2023-06-06 00:59:24,687 [trainer.py] => weight_decay: 0.05
+2023-06-06 00:59:24,687 [trainer.py] => min_lr: 1e-08
+2023-06-06 00:59:24,687 [trainer.py] => optimizer: sgd
+2023-06-06 00:59:24,687 [trainer.py] => vpt_type: shallow
+2023-06-06 00:59:24,687 [trainer.py] => prompt_token_num: 3
+Downloading https://www.cs.toronto.edu/~kriz/cifar-10-python.tar.gz to ./data/cifar-10-python.tar.gz
+  0%|          | 0/170498071 [00:00<?, ?it/s]  0%|          | 131072/170498071 [00:00<02:13, 1279766.78it/s]  1%|          | 950272/170498071 [00:00<00:32, 5223133.22it/s]  1%|          | 1835008/170498071 [00:00<00:24, 6833545.02it/s]  2%|▏         | 2785280/170498071 [00:00<00:21, 7766275.58it/s]  2%|▏         | 3735552/170498071 [00:00<00:20, 8306018.45it/s]  3%|▎         | 4751360/170498071 [00:00<00:18, 8761239.52it/s]  3%|▎         | 5734400/170498071 [00:00<00:18, 8974884.03it/s]  4%|▍         | 6782976/170498071 [00:00<00:17, 9422551.75it/s]  5%|▍         | 7766016/170498071 [00:00<00:17, 9524808.63it/s]  5%|▌         | 8781824/170498071 [00:01<00:16, 9696951.89it/s]  6%|▌         | 9830400/170498071 [00:01<00:16, 9881139.33it/s]  6%|▋         | 10878976/170498071 [00:01<00:16, 9876067.57it/s]  7%|▋         | 11960320/170498071 [00:01<00:15, 10123837.39it/s]  8%|▊         | 13107200/170498071 [00:01<00:14, 10503572.46it/s]  8%|▊         | 14254080/170498071 [00:01<00:14, 10544074.40it/s]  9%|▉         | 15400960/170498071 [00:01<00:14, 10702843.28it/s] 10%|▉         | 16613376/170498071 [00:01<00:13, 11069899.77it/s] 10%|█         | 17760256/170498071 [00:01<00:13, 11173631.59it/s] 11%|█         | 18907136/170498071 [00:01<00:13, 11090297.20it/s] 12%|█▏        | 20054016/170498071 [00:02<00:13, 11191007.09it/s] 13%|█▎        | 21331968/170498071 [00:02<00:12, 11647917.06it/s] 13%|█▎        | 22511616/170498071 [00:02<00:12, 11538065.46it/s] 14%|█▍        | 23691264/170498071 [00:02<00:12, 11527852.02it/s] 15%|█▍        | 24936448/170498071 [00:02<00:12, 11777966.65it/s] 15%|█▌        | 26181632/170498071 [00:02<00:12, 11950184.72it/s] 16%|█▌        | 27394048/170498071 [00:02<00:12, 11880780.78it/s] 17%|█▋        | 28606464/170498071 [00:02<00:11, 11893972.29it/s] 18%|█▊        | 29917184/170498071 [00:02<00:11, 12204807.69it/s] 18%|█▊        | 31162368/170498071 [00:02<00:11, 12052726.44it/s] 19%|█▉        | 32407552/170498071 [00:03<00:11, 12123731.10it/s] 20%|█▉        | 33685504/170498071 [00:03<00:11, 12310566.95it/s] 21%|██        | 34996224/170498071 [00:03<00:11, 12302703.20it/s] 21%|██▏       | 36306944/170498071 [00:03<00:10, 12369256.06it/s] 22%|██▏       | 37584896/170498071 [00:03<00:10, 12454909.53it/s] 23%|██▎       | 38895616/170498071 [00:03<00:10, 12505878.80it/s] 24%|██▎       | 40173568/170498071 [00:03<00:10, 12549609.34it/s] 24%|██▍       | 41451520/170498071 [00:03<00:10, 12464418.29it/s] 25%|██▌       | 42795008/170498071 [00:03<00:10, 12544446.71it/s] 26%|██▌       | 44072960/170498071 [00:04<00:10, 12563856.82it/s] 27%|██▋       | 45350912/170498071 [00:04<00:09, 12535164.39it/s] 27%|██▋       | 46694400/170498071 [00:04<00:09, 12546830.25it/s] 28%|██▊       | 47972352/170498071 [00:04<00:09, 12594131.89it/s] 29%|██▉       | 49315840/170498071 [00:04<00:09, 12686596.52it/s] 30%|██▉       | 50692096/170498071 [00:04<00:09, 12986693.15it/s] 31%|███       | 52002816/170498071 [00:04<00:09, 12730371.12it/s] 31%|███▏      | 53346304/170498071 [00:04<00:09, 12774261.65it/s] 32%|███▏      | 54755328/170498071 [00:04<00:09, 12789237.78it/s] 33%|███▎      | 56131584/170498071 [00:04<00:08, 12808130.44it/s] 34%|███▎      | 57507840/170498071 [00:05<00:08, 13074937.36it/s] 34%|███▍      | 58818560/170498071 [00:05<00:08, 12850646.85it/s] 35%|███▌      | 60162048/170498071 [00:05<00:08, 12788885.49it/s] 36%|███▌      | 61603840/170498071 [00:05<00:08, 12862250.18it/s] 37%|███▋      | 62980096/170498071 [00:05<00:08, 12900325.37it/s] 38%|███▊      | 64389120/170498071 [00:05<00:08, 13208590.51it/s] 39%|███▊      | 65732608/170498071 [00:05<00:08, 12917141.95it/s] 39%|███▉      | 67076096/170498071 [00:05<00:07, 12976169.18it/s] 40%|████      | 68517888/170498071 [00:05<00:07, 13312032.91it/s] 41%|████      | 69861376/170498071 [00:05<00:07, 13146192.85it/s] 42%|████▏     | 71204864/170498071 [00:06<00:07, 13216758.81it/s] 43%|████▎     | 72548352/170498071 [00:06<00:07, 13276552.16it/s] 43%|████▎     | 73990144/170498071 [00:06<00:07, 13595790.34it/s] 44%|████▍     | 75366400/170498071 [00:06<00:07, 13443760.97it/s] 45%|████▌     | 76742656/170498071 [00:06<00:06, 13443935.00it/s] 46%|████▌     | 78184448/170498071 [00:06<00:06, 13705247.77it/s] 47%|████▋     | 79626240/170498071 [00:06<00:06, 13755708.19it/s] 48%|████▊     | 81035264/170498071 [00:06<00:06, 13714022.60it/s] 48%|████▊     | 82477056/170498071 [00:06<00:06, 13809993.16it/s] 49%|████▉     | 83984384/170498071 [00:07<00:06, 14125495.40it/s] 50%|█████     | 85426176/170498071 [00:07<00:06, 13944046.16it/s] 51%|█████     | 86867968/170498071 [00:07<00:05, 14077414.97it/s] 52%|█████▏    | 88375296/170498071 [00:07<00:05, 14309013.30it/s] 53%|█████▎    | 89849856/170498071 [00:07<00:05, 14255999.99it/s] 54%|█████▎    | 91291648/170498071 [00:07<00:05, 14150142.00it/s] 54%|█████▍    | 92733440/170498071 [00:07<00:05, 13939909.60it/s] 55%|█████▌    | 94142464/170498071 [00:07<00:05, 13895161.74it/s] 56%|█████▌    | 95551488/170498071 [00:07<00:05, 13865337.46it/s] 57%|█████▋    | 96960512/170498071 [00:07<00:05, 13809885.71it/s] 58%|█████▊    | 98369536/170498071 [00:08<00:05, 13858461.67it/s] 59%|█████▊    | 99778560/170498071 [00:08<00:05, 13902513.45it/s] 59%|█████▉    | 101187584/170498071 [00:08<00:04, 13867695.15it/s] 60%|██████    | 102629376/170498071 [00:08<00:04, 13942513.21it/s] 61%|██████    | 104071168/170498071 [00:08<00:04, 14029327.96it/s] 62%|██████▏   | 105480192/170498071 [00:08<00:04, 14022230.64it/s] 63%|██████▎   | 106889216/170498071 [00:08<00:04, 13993129.37it/s] 64%|██████▎   | 108331008/170498071 [00:08<00:04, 14033934.11it/s] 64%|██████▍   | 109805568/170498071 [00:08<00:04, 14174325.73it/s] 65%|██████▌   | 111280128/170498071 [00:08<00:04, 14326822.98it/s] 66%|██████▌   | 112754688/170498071 [00:09<00:04, 14386902.17it/s] 67%|██████▋   | 114262016/170498071 [00:09<00:03, 14501835.92it/s] 68%|██████▊   | 115736576/170498071 [00:09<00:03, 14553291.90it/s] 69%|██████▉   | 117243904/170498071 [00:09<00:03, 14705085.46it/s] 70%|██████▉   | 118849536/170498071 [00:09<00:03, 15099716.24it/s] 71%|███████   | 120487936/170498071 [00:09<00:03, 15387855.48it/s] 72%|███████▏  | 122126336/170498071 [00:09<00:03, 15638314.01it/s] 73%|███████▎  | 123731968/170498071 [00:09<00:02, 15709337.56it/s] 74%|███████▎  | 125370368/170498071 [00:09<00:02, 15881837.75it/s] 74%|███████▍  | 127008768/170498071 [00:09<00:02, 16008425.75it/s] 75%|███████▌  | 128647168/170498071 [00:10<00:02, 16048651.30it/s] 76%|███████▋  | 130318336/170498071 [00:10<00:02, 16214002.12it/s] 77%|███████▋  | 131989504/170498071 [00:10<00:02, 16280523.97it/s] 78%|███████▊  | 133693440/170498071 [00:10<00:02, 16477996.78it/s] 79%|███████▉  | 135364608/170498071 [00:10<00:02, 16449179.43it/s] 80%|████████  | 137068544/170498071 [00:10<00:02, 16615274.41it/s] 81%|████████▏ | 138739712/170498071 [00:10<00:01, 16532861.72it/s] 82%|████████▏ | 140443648/170498071 [00:10<00:01, 16627809.85it/s] 83%|████████▎ | 142147584/170498071 [00:10<00:01, 16668896.68it/s] 84%|████████▍ | 143917056/170498071 [00:10<00:01, 16873559.44it/s] 85%|████████▌ | 145653760/170498071 [00:11<00:01, 16829129.58it/s] 87%|████████▋ | 147488768/170498071 [00:11<00:01, 17229861.61it/s] 88%|████████▊ | 149225472/170498071 [00:11<00:01, 17118438.87it/s] 89%|████████▊ | 150994944/170498071 [00:11<00:01, 17241958.21it/s] 90%|████████▉ | 152731648/170498071 [00:11<00:01, 17206538.41it/s] 91%|█████████ | 154566656/170498071 [00:11<00:00, 17417254.61it/s] 92%|█████████▏| 156336128/170498071 [00:11<00:00, 17394885.02it/s] 93%|█████████▎| 158138368/170498071 [00:11<00:00, 17539149.63it/s] 94%|█████████▍| 159907840/170498071 [00:11<00:00, 17499064.78it/s] 95%|█████████▍| 161742848/170498071 [00:12<00:00, 17721970.74it/s] 96%|█████████▌| 163545088/170498071 [00:12<00:00, 17726692.85it/s] 97%|█████████▋| 165380096/170498071 [00:12<00:00, 17810259.64it/s] 98%|█████████▊| 167247872/170498071 [00:12<00:00, 17944252.24it/s] 99%|█████████▉| 169082880/170498071 [00:12<00:00, 18063037.08it/s]100%|██████████| 170498071/170498071 [00:12<00:00, 13653508.09it/s]
+Extracting ./data/cifar-10-python.tar.gz to ./data
+Files already downloaded and verified
+2023-06-06 00:59:39,810 [data_manager.py] => [4, 2, 7, 6, 0, 3, 5, 8, 9, 1]
+Traceback (most recent call last):
+  File "/people/cs/o/oxx220000/RevisitingCIL/main.py", line 24, in <module>
+    main()
+  File "/people/cs/o/oxx220000/RevisitingCIL/main.py", line 10, in main
+    train(args)
+  File "/people/cs/o/oxx220000/RevisitingCIL/trainer.py", line 18, in train
+    _train(args)
+  File "/people/cs/o/oxx220000/RevisitingCIL/trainer.py", line 57, in _train
+    model = factory.get_model(args["model_name"], args)
+  File "/people/cs/o/oxx220000/RevisitingCIL/utils/factory.py", line 4, in get_model
+    from models.simplecil import Learner
+  File "/people/cs/o/oxx220000/RevisitingCIL/models/simplecil.py", line 10, in <module>
+    from utils.inc_net import IncrementalNet,SimpleCosineIncrementalNet,SimpleVitNet
+  File "/people/cs/o/oxx220000/RevisitingCIL/utils/inc_net.py", line 6, in <module>
+    import timm
+ModuleNotFoundError: No module named 'timm'
+2023-06-06 01:07:42,273 [trainer.py] => config: ./exps/simplecil_cifar10.json
+2023-06-06 01:07:42,273 [trainer.py] => prefix:  
+2023-06-06 01:07:42,273 [trainer.py] => dataset: cifar10
+2023-06-06 01:07:42,273 [trainer.py] => memory_size: 0
+2023-06-06 01:07:42,273 [trainer.py] => memory_per_class: 0
+2023-06-06 01:07:42,273 [trainer.py] => fixed_memory: False
+2023-06-06 01:07:42,273 [trainer.py] => shuffle: True
+2023-06-06 01:07:42,273 [trainer.py] => init_cls: 10
+2023-06-06 01:07:42,273 [trainer.py] => increment: 10
+2023-06-06 01:07:42,273 [trainer.py] => model_name: simplecil
+2023-06-06 01:07:42,273 [trainer.py] => convnet_type: pretrained_vit_b16_224_in21k
+2023-06-06 01:07:42,273 [trainer.py] => device: [device(type='cuda', index=0)]
+2023-06-06 01:07:42,273 [trainer.py] => seed: 1993
+2023-06-06 01:07:42,273 [trainer.py] => tuned_epoch: 0
+2023-06-06 01:07:42,273 [trainer.py] => init_lr: 0.01
+2023-06-06 01:07:42,273 [trainer.py] => batch_size: 256
+2023-06-06 01:07:42,273 [trainer.py] => weight_decay: 0.05
+2023-06-06 01:07:42,273 [trainer.py] => min_lr: 1e-08
+2023-06-06 01:07:42,273 [trainer.py] => optimizer: sgd
+2023-06-06 01:07:42,273 [trainer.py] => vpt_type: shallow
+2023-06-06 01:07:42,273 [trainer.py] => prompt_token_num: 3
+Files already downloaded and verified
+Files already downloaded and verified
+2023-06-06 01:07:43,300 [data_manager.py] => [4, 2, 7, 6, 0, 3, 5, 8, 9, 1]
+/people/cs/o/oxx220000/.local/lib/python3.9/site-packages/timm/models/_factory.py:114: UserWarning: Mapping deprecated model name vit_base_patch16_224_in21k to current vit_base_patch16_224.augreg_in21k.
+  model = create_fn(
+This is for the BaseNet initialization.
+2023-06-06 01:07:44,319 [_builder.py] => Loading pretrained weights from Hugging Face hub (timm/vit_base_patch16_224.augreg_in21k)
+Downloading model.safetensors:   0%|          | 0.00/410M [00:00<?, ?B/s]Downloading model.safetensors:   3%|▎         | 10.5M/410M [00:00<00:06, 64.5MB/s]Downloading model.safetensors:   5%|▌         | 21.0M/410M [00:00<00:04, 78.7MB/s]Downloading model.safetensors:  10%|█         | 41.9M/410M [00:00<00:03, 97.7MB/s]Downloading model.safetensors:  15%|█▌        | 62.9M/410M [00:00<00:03, 106MB/s] Downloading model.safetensors:  20%|██        | 83.9M/410M [00:00<00:02, 110MB/s]Downloading model.safetensors:  26%|██▌       | 105M/410M [00:00<00:02, 113MB/s] Downloading model.safetensors:  31%|███       | 126M/410M [00:01<00:02, 114MB/s]Downloading model.safetensors:  36%|███▌      | 147M/410M [00:01<00:02, 115MB/s]Downloading model.safetensors:  41%|████      | 168M/410M [00:01<00:02, 116MB/s]Downloading model.safetensors:  46%|████▌     | 189M/410M [00:01<00:01, 116MB/s]Downloading model.safetensors:  51%|█████     | 210M/410M [00:01<00:01, 116MB/s]Downloading model.safetensors:  56%|█████▌    | 231M/410M [00:02<00:01, 117MB/s]Downloading model.safetensors:  61%|██████▏   | 252M/410M [00:02<00:01, 117MB/s]Downloading model.safetensors:  66%|██████▋   | 273M/410M [00:02<00:01, 117MB/s]Downloading model.safetensors:  72%|███████▏  | 294M/410M [00:02<00:00, 117MB/s]Downloading model.safetensors:  77%|███████▋  | 315M/410M [00:02<00:00, 117MB/s]Downloading model.safetensors:  82%|████████▏ | 336M/410M [00:02<00:00, 117MB/s]Downloading model.safetensors:  87%|████████▋ | 357M/410M [00:03<00:00, 117MB/s]Downloading model.safetensors:  92%|█████████▏| 377M/410M [00:03<00:00, 117MB/s]Downloading model.safetensors:  97%|█████████▋| 398M/410M [00:03<00:00, 117MB/s]Downloading model.safetensors: 100%|██████████| 410M/410M [00:03<00:00, 108MB/s]Downloading model.safetensors: 100%|██████████| 410M/410M [00:03<00:00, 112MB/s]
+2023-06-06 01:07:48,242 [_hub.py] => [timm/vit_base_patch16_224.augreg_in21k] Safe alternative available for 'pytorch_model.bin' (as 'model.safetensors'). Loading weights using safetensors.
+After BaseNet initialization.
+2023-06-06 01:07:48,274 [trainer.py] => All params: 85798656
+2023-06-06 01:07:48,274 [trainer.py] => Trainable params: 85798656
+2023-06-06 01:07:48,667 [simplecil.py] => Learning on 0-10
+Traceback (most recent call last):
+  File "/people/cs/o/oxx220000/RevisitingCIL/main.py", line 24, in <module>
+    main()
+  File "/people/cs/o/oxx220000/RevisitingCIL/main.py", line 10, in main
+    train(args)
+  File "/people/cs/o/oxx220000/RevisitingCIL/trainer.py", line 18, in train
+    _train(args)
+  File "/people/cs/o/oxx220000/RevisitingCIL/trainer.py", line 65, in _train
+    model.incremental_train(data_manager)
+  File "/people/cs/o/oxx220000/RevisitingCIL/models/simplecil.py", line 72, in incremental_train
+    self._train(self.train_loader, self.test_loader, self.train_loader_for_protonet)
+  File "/people/cs/o/oxx220000/RevisitingCIL/models/simplecil.py", line 79, in _train
+    self.replace_fc(train_loader_for_protonet, self._network, None)
+  File "/people/cs/o/oxx220000/RevisitingCIL/models/simplecil.py", line 36, in replace_fc
+    embedding=model.convnet(data)
+  File "/people/cs/o/oxx220000/.local/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1501, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/people/cs/o/oxx220000/.local/lib/python3.9/site-packages/timm/models/vision_transformer.py", line 632, in forward
+    x = self.forward_features(x)
+  File "/people/cs/o/oxx220000/.local/lib/python3.9/site-packages/timm/models/vision_transformer.py", line 613, in forward_features
+    x = self.patch_embed(x)
+  File "/people/cs/o/oxx220000/.local/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1501, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/people/cs/o/oxx220000/.local/lib/python3.9/site-packages/timm/layers/patch_embed.py", line 66, in forward
+    _assert(H == self.img_size[0], f"Input image height ({H}) doesn't match model ({self.img_size[0]}).")
+  File "/people/cs/o/oxx220000/.local/lib/python3.9/site-packages/torch/__init__.py", line 1209, in _assert
+    assert condition, message
+AssertionError: Input image height (32) doesn't match model (224).
+2023-06-06 01:08:50,202 [trainer.py] => config: ./exps/simplecil.json
+2023-06-06 01:08:50,202 [trainer.py] => prefix:  
+2023-06-06 01:08:50,202 [trainer.py] => dataset: cifar224
+2023-06-06 01:08:50,202 [trainer.py] => memory_size: 0
+2023-06-06 01:08:50,202 [trainer.py] => memory_per_class: 0
+2023-06-06 01:08:50,202 [trainer.py] => fixed_memory: False
+2023-06-06 01:08:50,202 [trainer.py] => shuffle: True
+2023-06-06 01:08:50,202 [trainer.py] => init_cls: 10
+2023-06-06 01:08:50,202 [trainer.py] => increment: 10
+2023-06-06 01:08:50,202 [trainer.py] => model_name: simplecil
+2023-06-06 01:08:50,202 [trainer.py] => convnet_type: pretrained_vit_b16_224_in21k
+2023-06-06 01:08:50,202 [trainer.py] => device: [device(type='cuda', index=3)]
+2023-06-06 01:08:50,202 [trainer.py] => seed: 1993
+2023-06-06 01:08:50,202 [trainer.py] => tuned_epoch: 0
+2023-06-06 01:08:50,203 [trainer.py] => init_lr: 0.01
+2023-06-06 01:08:50,203 [trainer.py] => batch_size: 256
+2023-06-06 01:08:50,203 [trainer.py] => weight_decay: 0.05
+2023-06-06 01:08:50,203 [trainer.py] => min_lr: 1e-08
+2023-06-06 01:08:50,203 [trainer.py] => optimizer: sgd
+2023-06-06 01:08:50,203 [trainer.py] => vpt_type: shallow
+2023-06-06 01:08:50,203 [trainer.py] => prompt_token_num: 3
+Downloading https://www.cs.toronto.edu/~kriz/cifar-100-python.tar.gz to ./data/cifar-100-python.tar.gz
+  0%|          | 0/169001437 [00:00<?, ?it/s]  0%|          | 131072/169001437 [00:00<02:16, 1241376.09it/s]  1%|          | 950272/169001437 [00:00<00:32, 5208675.27it/s]  1%|▏         | 2195456/169001437 [00:00<00:19, 8344858.82it/s]  2%|▏         | 3407872/169001437 [00:00<00:17, 9723528.83it/s]  3%|▎         | 4554752/169001437 [00:00<00:15, 10298663.99it/s]  3%|▎         | 5701632/169001437 [00:00<00:15, 10658141.02it/s]  4%|▍         | 6848512/169001437 [00:00<00:14, 10916390.80it/s]  5%|▍         | 8028160/169001437 [00:00<00:14, 11140352.49it/s]  5%|▌         | 9175040/169001437 [00:00<00:14, 11229787.87it/s]  6%|▌         | 10387456/169001437 [00:01<00:13, 11453715.98it/s]  7%|▋         | 11567104/169001437 [00:01<00:13, 11517923.54it/s]  8%|▊         | 12746752/169001437 [00:01<00:13, 11588822.98it/s]  8%|▊         | 13926400/169001437 [00:01<00:13, 11603153.01it/s]  9%|▉         | 15106048/169001437 [00:01<00:13, 11533138.51it/s] 10%|▉         | 16285696/169001437 [00:01<00:13, 11591054.92it/s] 10%|█         | 17465344/169001437 [00:01<00:13, 11621585.17it/s] 11%|█         | 18644992/169001437 [00:01<00:13, 11542956.79it/s] 12%|█▏        | 19857408/169001437 [00:01<00:12, 11638434.72it/s] 12%|█▏        | 21037056/169001437 [00:01<00:12, 11616716.53it/s] 13%|█▎        | 22216704/169001437 [00:02<00:12, 11497413.05it/s] 14%|█▍        | 23396352/169001437 [00:02<00:12, 11541446.02it/s] 15%|█▍        | 24576000/169001437 [00:02<00:12, 11575329.08it/s] 15%|█▌        | 25788416/169001437 [00:02<00:12, 11636415.77it/s] 16%|█▌        | 26968064/169001437 [00:02<00:12, 11641596.62it/s] 17%|█▋        | 28147712/169001437 [00:02<00:12, 11619288.26it/s] 17%|█▋        | 29327360/169001437 [00:02<00:11, 11640122.15it/s] 18%|█▊        | 30507008/169001437 [00:02<00:11, 11648451.92it/s] 19%|█▉        | 31784960/169001437 [00:02<00:11, 11948237.31it/s] 20%|█▉        | 33128448/169001437 [00:02<00:11, 12330214.73it/s] 20%|██        | 34471936/169001437 [00:03<00:10, 12553272.53it/s] 21%|██        | 35749888/169001437 [00:03<00:10, 12569894.88it/s] 22%|██▏       | 37027840/169001437 [00:03<00:10, 12251608.11it/s] 23%|██▎       | 38273024/169001437 [00:03<00:10, 12037232.00it/s] 23%|██▎       | 39485440/169001437 [00:03<00:10, 11836984.82it/s] 24%|██▍       | 40697856/169001437 [00:03<00:11, 11643275.94it/s] 25%|██▍       | 41877504/169001437 [00:03<00:10, 11627949.74it/s] 25%|██▌       | 43057152/169001437 [00:03<00:10, 11589521.09it/s] 26%|██▌       | 44236800/169001437 [00:03<00:10, 11630359.66it/s] 27%|██▋       | 45416448/169001437 [00:03<00:10, 11675520.55it/s] 28%|██▊       | 46596096/169001437 [00:04<00:10, 11701184.38it/s] 28%|██▊       | 47775744/169001437 [00:04<00:10, 11721274.03it/s] 29%|██▉       | 48955392/169001437 [00:04<00:10, 11614559.66it/s] 30%|██▉       | 50135040/169001437 [00:04<00:10, 11500953.20it/s] 30%|███       | 51314688/169001437 [00:04<00:10, 11396849.46it/s] 31%|███       | 52461568/169001437 [00:04<00:10, 11355669.51it/s] 32%|███▏      | 53608448/169001437 [00:04<00:10, 11377141.31it/s] 32%|███▏      | 54755328/169001437 [00:04<00:10, 11074573.41it/s] 33%|███▎      | 55869440/169001437 [00:04<00:10, 10848792.52it/s] 34%|███▎      | 56983552/169001437 [00:05<00:10, 10743406.53it/s] 34%|███▍      | 58064896/169001437 [00:05<00:10, 10545780.36it/s] 35%|███▍      | 59146240/169001437 [00:05<00:10, 10451899.41it/s] 36%|███▌      | 60194816/169001437 [00:05<00:10, 10411324.39it/s] 36%|███▋      | 61276160/169001437 [00:05<00:10, 10446056.31it/s] 37%|███▋      | 62324736/169001437 [00:05<00:10, 10418884.26it/s] 37%|███▋      | 63373312/169001437 [00:05<00:10, 10251690.38it/s] 38%|███▊      | 64421888/169001437 [00:05<00:10, 10241902.76it/s] 39%|███▊      | 65470464/169001437 [00:05<00:10, 10153164.72it/s] 39%|███▉      | 66519040/169001437 [00:05<00:10, 10209491.78it/s] 40%|███▉      | 67600384/169001437 [00:06<00:09, 10292486.19it/s] 41%|████      | 68648960/169001437 [00:06<00:09, 10232817.94it/s] 41%|████▏     | 69730304/169001437 [00:06<00:09, 10309361.04it/s] 42%|████▏     | 70778880/169001437 [00:06<00:09, 10304575.07it/s] 43%|████▎     | 71827456/169001437 [00:06<00:09, 10273725.10it/s] 43%|████▎     | 72876032/169001437 [00:06<00:09, 10161174.02it/s] 44%|████▎     | 73924608/169001437 [00:06<00:09, 10148215.55it/s] 44%|████▍     | 74973184/169001437 [00:06<00:09, 10168758.29it/s] 45%|████▍     | 76021760/169001437 [00:06<00:09, 10142116.68it/s] 46%|████▌     | 77070336/169001437 [00:07<00:08, 10241060.02it/s] 46%|████▌     | 78118912/169001437 [00:07<00:08, 10215594.95it/s] 47%|████▋     | 79167488/169001437 [00:07<00:08, 10080109.58it/s] 47%|████▋     | 80216064/169001437 [00:07<00:08, 10045633.28it/s] 48%|████▊     | 81231872/169001437 [00:07<00:08, 10004941.68it/s] 49%|████▊     | 82247680/169001437 [00:07<00:08, 9995518.47it/s]  49%|████▉     | 83263488/169001437 [00:07<00:08, 10034943.23it/s] 50%|████▉     | 84279296/169001437 [00:07<00:08, 10044514.30it/s] 50%|█████     | 85327872/169001437 [00:07<00:08, 10110483.69it/s] 51%|█████     | 86343680/169001437 [00:07<00:08, 9992719.43it/s]  52%|█████▏    | 87392256/169001437 [00:08<00:08, 10028656.55it/s] 52%|█████▏    | 88440832/169001437 [00:08<00:07, 10146239.84it/s] 53%|█████▎    | 89489408/169001437 [00:08<00:07, 10192228.57it/s] 54%|█████▎    | 90636288/169001437 [00:08<00:07, 10540440.03it/s] 54%|█████▍    | 91750400/169001437 [00:08<00:07, 10667269.17it/s] 55%|█████▍    | 92864512/169001437 [00:08<00:07, 10763039.68it/s] 56%|█████▌    | 93945856/169001437 [00:08<00:06, 10750266.26it/s] 56%|█████▋    | 95092736/169001437 [00:08<00:06, 10871155.58it/s] 57%|█████▋    | 96239616/169001437 [00:08<00:06, 10964411.00it/s] 58%|█████▊    | 97419264/169001437 [00:08<00:06, 11196050.91it/s] 58%|█████▊    | 98729984/169001437 [00:09<00:06, 11689512.64it/s] 59%|█████▉    | 99975168/169001437 [00:09<00:05, 11897488.34it/s] 60%|█████▉    | 101187584/169001437 [00:09<00:05, 11934636.64it/s] 61%|██████    | 102400000/169001437 [00:09<00:05, 11706295.23it/s] 61%|██████▏   | 103579648/169001437 [00:09<00:05, 11719699.02it/s] 62%|██████▏   | 105185280/169001437 [00:09<00:04, 12916532.28it/s] 64%|██████▎   | 107610112/169001437 [00:09<00:03, 16223285.49it/s] 65%|██████▌   | 110362624/169001437 [00:09<00:03, 19466837.32it/s] 67%|██████▋   | 112984064/169001437 [00:09<00:02, 21396525.12it/s] 68%|██████▊   | 115671040/169001437 [00:09<00:02, 23003236.57it/s] 70%|███████   | 118325248/169001437 [00:10<00:02, 23920735.03it/s] 72%|███████▏  | 121438208/169001437 [00:10<00:01, 26019121.85it/s] 74%|███████▍  | 125304832/169001437 [00:10<00:01, 29764306.30it/s] 76%|███████▋  | 129040384/169001437 [00:10<00:01, 31908047.50it/s] 78%|███████▊  | 132284416/169001437 [00:10<00:01, 31978707.96it/s] 81%|████████  | 136183808/169001437 [00:10<00:00, 34000136.72it/s] 83%|████████▎ | 140541952/169001437 [00:10<00:00, 36709448.95it/s] 86%|████████▋ | 146014208/169001437 [00:10<00:00, 42065631.23it/s] 90%|████████▉ | 151846912/169001437 [00:10<00:00, 46801043.89it/s] 94%|█████████▍| 158760960/169001437 [00:10<00:00, 53433861.51it/s] 98%|█████████▊| 165412864/169001437 [00:11<00:00, 57327140.22it/s]100%|██████████| 169001437/169001437 [00:11<00:00, 15188968.26it/s]
+Extracting ./data/cifar-100-python.tar.gz to ./data
+Files already downloaded and verified
+2023-06-06 01:09:03,512 [data_manager.py] => [68, 56, 78, 8, 23, 84, 90, 65, 74, 76, 40, 89, 3, 92, 55, 9, 26, 80, 43, 38, 58, 70, 77, 1, 85, 19, 17, 50, 28, 53, 13, 81, 45, 82, 6, 59, 83, 16, 15, 44, 91, 41, 72, 60, 79, 52, 20, 10, 31, 54, 37, 95, 14, 71, 96, 98, 97, 2, 64, 66, 42, 22, 35, 86, 24, 34, 87, 21, 99, 0, 88, 27, 18, 94, 11, 12, 47, 25, 30, 46, 62, 69, 36, 61, 7, 63, 75, 5, 32, 4, 51, 48, 73, 93, 39, 67, 29, 49, 57, 33]
+/people/cs/o/oxx220000/.local/lib/python3.9/site-packages/timm/models/_factory.py:114: UserWarning: Mapping deprecated model name vit_base_patch16_224_in21k to current vit_base_patch16_224.augreg_in21k.
+  model = create_fn(
+This is for the BaseNet initialization.
+2023-06-06 01:09:04,682 [_builder.py] => Loading pretrained weights from Hugging Face hub (timm/vit_base_patch16_224.augreg_in21k)
+2023-06-06 01:09:04,815 [_hub.py] => [timm/vit_base_patch16_224.augreg_in21k] Safe alternative available for 'pytorch_model.bin' (as 'model.safetensors'). Loading weights using safetensors.
+After BaseNet initialization.
+2023-06-06 01:09:04,851 [trainer.py] => All params: 85798656
+2023-06-06 01:09:04,851 [trainer.py] => Trainable params: 85798656
+2023-06-06 01:09:05,238 [simplecil.py] => Learning on 0-10
+Traceback (most recent call last):
+  File "/people/cs/o/oxx220000/RevisitingCIL/main.py", line 24, in <module>
+    main()
+  File "/people/cs/o/oxx220000/RevisitingCIL/main.py", line 10, in main
+    train(args)
+  File "/people/cs/o/oxx220000/RevisitingCIL/trainer.py", line 18, in train
+    _train(args)
+  File "/people/cs/o/oxx220000/RevisitingCIL/trainer.py", line 65, in _train
+    model.incremental_train(data_manager)
+  File "/people/cs/o/oxx220000/RevisitingCIL/models/simplecil.py", line 72, in incremental_train
+    self._train(self.train_loader, self.test_loader, self.train_loader_for_protonet)
+  File "/people/cs/o/oxx220000/RevisitingCIL/models/simplecil.py", line 79, in _train
+    self.replace_fc(train_loader_for_protonet, self._network, None)
+  File "/people/cs/o/oxx220000/RevisitingCIL/models/simplecil.py", line 36, in replace_fc
+    embedding=model.convnet(data)
+  File "/people/cs/o/oxx220000/.local/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1501, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/people/cs/o/oxx220000/.local/lib/python3.9/site-packages/timm/models/vision_transformer.py", line 632, in forward
+    x = self.forward_features(x)
+  File "/people/cs/o/oxx220000/.local/lib/python3.9/site-packages/timm/models/vision_transformer.py", line 613, in forward_features
+    x = self.patch_embed(x)
+  File "/people/cs/o/oxx220000/.local/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1501, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/people/cs/o/oxx220000/.local/lib/python3.9/site-packages/timm/layers/patch_embed.py", line 69, in forward
+    x = self.proj(x)
+  File "/people/cs/o/oxx220000/.local/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1501, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/people/cs/o/oxx220000/.local/lib/python3.9/site-packages/torch/nn/modules/conv.py", line 463, in forward
+    return self._conv_forward(input, self.weight, self.bias)
+  File "/people/cs/o/oxx220000/.local/lib/python3.9/site-packages/torch/nn/modules/conv.py", line 459, in _conv_forward
+    return F.conv2d(input, weight, bias, self.stride,
+RuntimeError: Expected all tensors to be on the same device, but found at least two devices, cuda:0 and cuda:3! (when checking argument for argument weight in method wrapper_CUDA__cudnn_convolution)

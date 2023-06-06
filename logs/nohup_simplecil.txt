@@ -1,0 +1,73 @@
+2023-06-06 01:54:30,862 [trainer.py] => config: ./exps/simplecil.json
+2023-06-06 01:54:30,862 [trainer.py] => prefix:  
+2023-06-06 01:54:30,862 [trainer.py] => dataset: cifar224
+2023-06-06 01:54:30,862 [trainer.py] => memory_size: 0
+2023-06-06 01:54:30,862 [trainer.py] => memory_per_class: 0
+2023-06-06 01:54:30,862 [trainer.py] => fixed_memory: False
+2023-06-06 01:54:30,862 [trainer.py] => shuffle: True
+2023-06-06 01:54:30,862 [trainer.py] => init_cls: 10
+2023-06-06 01:54:30,863 [trainer.py] => increment: 10
+2023-06-06 01:54:30,863 [trainer.py] => model_name: simplecil
+2023-06-06 01:54:30,863 [trainer.py] => convnet_type: pretrained_vit_b16_224_in21k
+2023-06-06 01:54:30,863 [trainer.py] => device: [device(type='cuda', index=0)]
+2023-06-06 01:54:30,863 [trainer.py] => seed: 1993
+2023-06-06 01:54:30,863 [trainer.py] => tuned_epoch: 0
+2023-06-06 01:54:30,863 [trainer.py] => init_lr: 0.01
+2023-06-06 01:54:30,863 [trainer.py] => batch_size: 256
+2023-06-06 01:54:30,863 [trainer.py] => weight_decay: 0.05
+2023-06-06 01:54:30,863 [trainer.py] => min_lr: 1e-08
+2023-06-06 01:54:30,863 [trainer.py] => optimizer: sgd
+2023-06-06 01:54:30,863 [trainer.py] => vpt_type: shallow
+2023-06-06 01:54:30,863 [trainer.py] => prompt_token_num: 3
+Files already downloaded and verified
+Files already downloaded and verified
+2023-06-06 01:54:32,128 [data_manager.py] => [68, 56, 78, 8, 23, 84, 90, 65, 74, 76, 40, 89, 3, 92, 55, 9, 26, 80, 43, 38, 58, 70, 77, 1, 85, 19, 17, 50, 28, 53, 13, 81, 45, 82, 6, 59, 83, 16, 15, 44, 91, 41, 72, 60, 79, 52, 20, 10, 31, 54, 37, 95, 14, 71, 96, 98, 97, 2, 64, 66, 42, 22, 35, 86, 24, 34, 87, 21, 99, 0, 88, 27, 18, 94, 11, 12, 47, 25, 30, 46, 62, 69, 36, 61, 7, 63, 75, 5, 32, 4, 51, 48, 73, 93, 39, 67, 29, 49, 57, 33]
+/people/cs/o/oxx220000/.local/lib/python3.9/site-packages/timm/models/_factory.py:114: UserWarning: Mapping deprecated model name vit_base_patch16_224_in21k to current vit_base_patch16_224.augreg_in21k.
+  model = create_fn(
+This is for the BaseNet initialization.
+2023-06-06 01:54:38,060 [_builder.py] => Loading pretrained weights from Hugging Face hub (timm/vit_base_patch16_224.augreg_in21k)
+2023-06-06 01:54:38,161 [_hub.py] => [timm/vit_base_patch16_224.augreg_in21k] Safe alternative available for 'pytorch_model.bin' (as 'model.safetensors'). Loading weights using safetensors.
+After BaseNet initialization.
+2023-06-06 01:54:38,215 [trainer.py] => All params: 85798656
+2023-06-06 01:54:38,225 [trainer.py] => Trainable params: 85798656
+2023-06-06 01:54:38,916 [simplecil.py] => Learning on 0-10
+2023-06-06 01:55:02,305 [trainer.py] => No NME accuracy.
+2023-06-06 01:55:02,305 [trainer.py] => CNN: {'total': 95.0, '00-09': 95.0, 'old': 0, 'new': 95.0}
+2023-06-06 01:55:02,305 [trainer.py] => CNN top1 curve: [95.0]
+2023-06-06 01:55:02,306 [trainer.py] => CNN top5 curve: [99.7]
+
+Average Accuracy (CNN): 95.0
+2023-06-06 01:55:02,306 [trainer.py] => Average Accuracy (CNN): 95.0
+2023-06-06 01:55:02,306 [trainer.py] => All params: 85806337
+2023-06-06 01:55:02,307 [trainer.py] => Trainable params: 85806337
+2023-06-06 01:55:02,308 [simplecil.py] => Learning on 10-20
+2023-06-06 01:55:27,759 [trainer.py] => No NME accuracy.
+2023-06-06 01:55:27,759 [trainer.py] => CNN: {'total': 92.2, '00-09': 93.3, '10-19': 91.1, 'old': 93.3, 'new': 91.1}
+2023-06-06 01:55:27,759 [trainer.py] => CNN top1 curve: [95.0, 92.2]
+2023-06-06 01:55:27,760 [trainer.py] => CNN top5 curve: [99.7, 98.7]
+
+Average Accuracy (CNN): 93.6
+2023-06-06 01:55:27,760 [trainer.py] => Average Accuracy (CNN): 93.6
+2023-06-06 01:55:27,760 [trainer.py] => All params: 85814017
+2023-06-06 01:55:27,761 [trainer.py] => Trainable params: 85814017
+2023-06-06 01:55:27,762 [simplecil.py] => Learning on 20-30
+2023-06-06 01:55:58,024 [trainer.py] => No NME accuracy.
+2023-06-06 01:55:58,024 [trainer.py] => CNN: {'total': 91.77, '00-09': 92.0, '10-19': 89.6, '20-29': 93.7, 'old': 90.8, 'new': 93.7}
+2023-06-06 01:55:58,025 [trainer.py] => CNN top1 curve: [95.0, 92.2, 91.77]
+2023-06-06 01:55:58,025 [trainer.py] => CNN top5 curve: [99.7, 98.7, 98.4]
+
+Average Accuracy (CNN): 92.99
+2023-06-06 01:55:58,025 [trainer.py] => Average Accuracy (CNN): 92.99
+2023-06-06 01:55:58,026 [trainer.py] => All params: 85821697
+2023-06-06 01:55:58,026 [trainer.py] => Trainable params: 85821697
+2023-06-06 01:55:58,027 [simplecil.py] => Learning on 30-40
+2023-06-06 01:56:32,058 [trainer.py] => No NME accuracy.
+2023-06-06 01:56:32,058 [trainer.py] => CNN: {'total': 89.1, '00-09': 89.6, '10-19': 87.6, '20-29': 91.8, '30-39': 87.4, 'old': 89.67, 'new': 87.4}
+2023-06-06 01:56:32,059 [trainer.py] => CNN top1 curve: [95.0, 92.2, 91.77, 89.1]
+2023-06-06 01:56:32,059 [trainer.py] => CNN top5 curve: [99.7, 98.7, 98.4, 97.92]
+
+Average Accuracy (CNN): 92.01749999999998
+2023-06-06 01:56:32,059 [trainer.py] => Average Accuracy (CNN): 92.01749999999998
+2023-06-06 01:56:32,060 [trainer.py] => All params: 85829377
+2023-06-06 01:56:32,061 [trainer.py] => Trainable params: 85829377
+2023-06-06 01:56:32,062 [simplecil.py] => Learning on 40-50

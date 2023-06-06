@@ -9,7 +9,7 @@
     "increment": 10,
     "model_name": "adam_ssf",
     "convnet_type": "pretrained_vit_b16_224_in21k_ssf",
-    "device": ["0"],
+    "device": ["1"],
     "seed": [1993],
     
     "tuned_epoch":20,
