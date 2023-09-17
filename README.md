@@ -65,6 +65,8 @@ We provide the processed datasets as follows:
 
 These subsets are sampled from the original datasets. Please note that I do not have the right to distribute these datasets. If the distribution violates the license, I shall provide the filenames instead.
 
+The md5sum information can be found in this [issue](https://github.com/zhoudw-zdw/RevisitingCIL/issues/5).
+
 You need to modify the path of the datasets in `./utils/data.py`  according to your own path.
 
 ## Running scripts
