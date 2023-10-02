@@ -18,8 +18,7 @@ class Learner(BaseLearner):
     def __init__(self, args):
         super().__init__(args)
         if 'adapter' not in args["convnet_type"]:
-            pass
-            # raise NotImplementedError('Adapter requires Adapter backbone')
+            raise NotImplementedError('Adapter requires Adapter backbone')
 
         if 'resnet' in args['convnet_type']:
             self._network = SimpleCosineIncrementalNet(args, True)

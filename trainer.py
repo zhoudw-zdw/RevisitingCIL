@@ -26,15 +26,6 @@ def _train(args, tag, mode):
     if not os.path.exists(logs_name):
         os.makedirs(logs_name)
 
-    # logfilename = "logs/{}/{}/{}/{}/{}_{}_{}".format(
-    #     args["model_name"],
-    #     args["dataset"],
-    #     init_cls,
-    #     args["increment"],
-    #     args["prefix"],
-    #     args["seed"],
-    #     args["convnet_type"],
-    # )
     logfilename = "logs/{}/{}/{}/{}/{}".format(
         args["model_name"],
         args["dataset"],

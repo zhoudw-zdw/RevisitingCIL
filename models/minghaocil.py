@@ -12,6 +12,7 @@ from models.base import BaseLearner
 from utils.toolkit import target2onehot, tensor2numpy
 
 from torchvision.ops.focal_loss import sigmoid_focal_loss
+from convs.vpt import build_promptmodel, VPT_ViT
 
 num_workers = 8
 # batch_size=128
@@ -20,10 +21,27 @@ class Learner(BaseLearner):
     def __init__(self, args):
         super().__init__(args)
         self._network = SimpleVitNet(args, True)
+        
+        # ! VPT
+        model = VPT_ViT(Prompt_Token_num=10,VPT_type=args["vpt_type"])
+        # drop head.weight and head.bias
+        basicmodeldict=self._network.convnet.state_dict()
+        # import pdb; pdb.set_trace()
+        # basicmodeldict.pop('head.weight')
+        # basicmodeldict.pop('head.bias')
+        model.load_state_dict(basicmodeldict, False)
+        model.head = torch.nn.Identity()
+        model.Freeze()
+        prompt_state_dict = model.obtain_prompt()
+        model.load_prompt(prompt_state_dict)
+        model.eval()
+        
+        # configs
         self.batch_size= args["batch_size"]
         self.init_lr=args["init_lr"]
         self.weight_decay=args["weight_decay"] if args["weight_decay"] is not None else 0.0005
         self.min_lr=args['min_lr'] if args['min_lr'] is not None else 1e-8
+        self.loss_fn=args['loss_fn'] if args['loss_fn'] is not None else 'cross_entropy'
         self.args=args
         self.state_dict = None
 
@@ -96,7 +114,7 @@ class Learner(BaseLearner):
             #     self._network = self._network.module
 
     def _train(self, train_loader, test_loader, train_loader_for_protonet, mode="train"):
-        # self._network.to(self._device)
+        self._network.cuda()
         
         # mihghao's solution
         if self._cur_task == 0:
@@ -111,6 +129,7 @@ class Learner(BaseLearner):
                 total_trainable_params = sum(
                     p.numel() for p in self._network.parameters() if p.requires_grad)
                 print(f'{total_trainable_params:,} training parameters.')
+                
                 if total_params != total_trainable_params:
                     for name, param in self._network.named_parameters():
                         if param.requires_grad:
@@ -132,12 +151,16 @@ class Learner(BaseLearner):
                 self._init_train(train_loader, test_loader, optimizer, scheduler)
             self.construct_dual_branch_network()
         else:
-            self._network = self._network.module
+            if len(self._multiple_gpus) > 1:
+                self._network = self._network.module
         self.replace_fc(train_loader_for_protonet, self._network, None)
 
     def construct_dual_branch_network(self):
         network = MultiBranchCosineIncrementalNet(self.args, True)
-        network.construct_dual_branch_network(self._network.module)
+        if len(self._multiple_gpus) > 1:
+            network.construct_dual_branch_network(self._network.module)
+        else:
+            network.construct_dual_branch_network(self._network)
         # self._network=network.to(self._device)
         self._network=network.cuda()
 
@@ -153,8 +176,13 @@ class Learner(BaseLearner):
                 logits = self._network(inputs)["logits"]
 
                 # ! Loss function, using focal loss
-                loss = F.cross_entropy(logits, targets)
-                # loss = sigmoid_focal_loss(logits, targets, alpha=0.25, gamma=2.0, reduction="mean")
+                if self.loss_fn == "cross_entropy":
+                    loss = F.cross_entropy(logits, targets)
+                elif self.loss_fn == "focal_loss":
+                    loss = sigmoid_focal_loss(logits, targets, alpha=0.25, gamma=2.0, reduction="mean")
+                else:
+                    raise NotImplementedError
+                
                 optimizer.zero_grad()
                 loss.backward()
                 optimizer.step()
