@@ -12,7 +12,7 @@ def build_promptmodel(modelname='vit_base_patch16_224',  Prompt_Token_num=10, VP
     basic_model = timm.create_model(modelname, pretrained=True)
     model = VPT_ViT(Prompt_Token_num=Prompt_Token_num,VPT_type=VPT_type)
     # model.New_CLS_head(num_classes)
-
+    import pdb; pdb.set_trace()
     # drop head.weight and head.bias
     basicmodeldict=basic_model.state_dict()
     basicmodeldict.pop('head.weight')

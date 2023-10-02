@@ -12,9 +12,9 @@ def main():
     if args.device!=None:
         print('new setting [device]:', args.device)
         param['device'] = [str(args.device)]
-    if args.batch_size!=None:
-        print('new setting [batch_size]:', args.batch_size)
-        param['batch_size'] = args.batch_size
+    if args.tuned_epoch!=None:
+        print('new setting [tuned_epoch]:', args.tuned_epoch)
+        param['tuned_epoch'] = args.tuned_epoch
         
     args_dict = vars(args)  # Converting argparse Namespace to a dict.
     args_dict.update(param)  # Add parameters from json
@@ -31,7 +31,7 @@ def setup_parser():
                         help='Json file of settings.')
     parser.add_argument('--mode', type=str, default='train')
     parser.add_argument('--device', type=int)
-    parser.add_argument('--batch_size', type=int)
+    parser.add_argument('--tuned_epoch', type=int)
     return parser
 
 if __name__ == '__main__':
