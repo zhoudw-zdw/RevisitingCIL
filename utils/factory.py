@@ -15,5 +15,8 @@ def get_model(model_name, args):
     elif name=="adam_adapter":
         from models.adam_adapter import Learner
         return Learner(args)
+    elif name=="minghaocil":
+        from models.minghaocil import Learner
+        return Learner(args)
     else:
         assert 0

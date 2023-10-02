@@ -18,16 +18,17 @@ class Learner(BaseLearner):
     def __init__(self, args):
         super().__init__(args)
         if 'adapter' not in args["convnet_type"]:
-            raise NotImplementedError('Adapter requires Adapter backbone')
+            pass
+            # raise NotImplementedError('Adapter requires Adapter backbone')
 
         if 'resnet' in args['convnet_type']:
             self._network = SimpleCosineIncrementalNet(args, True)
-            self. batch_size=128
+            self. batch_size=args["batch_size"]
             self.init_lr=args["init_lr"] if args["init_lr"] is not None else  0.01
         else:
             self._network = SimpleVitNet(args, True)
-            self. batch_size= args["batch_size"]
-            self. init_lr=args["init_lr"]
+            self.batch_size= args["batch_size"]
+            self.init_lr=args["init_lr"]
         
         self.weight_decay=args["weight_decay"] if args["weight_decay"] is not None else 0.0005
         self.min_lr=args['min_lr'] if args['min_lr'] is not None else 1e-8
@@ -86,11 +87,10 @@ class Learner(BaseLearner):
             print('Multiple GPUs')
             self._network = nn.DataParallel(self._network, self._multiple_gpus)
         self._train(self.train_loader, self.test_loader, self.train_loader_for_protonet)
-        if len(self._multiple_gpus) > 1:
-            self._network = self._network.module
+        # if len(self._multiple_gpus) > 1:
+        #     self._network = self._network.module
 
     def _train(self, train_loader, test_loader, train_loader_for_protonet):
-        
         self._network.to(self._device)
         
         if self._cur_task == 0:
@@ -112,13 +112,13 @@ class Learner(BaseLearner):
             self._init_train(train_loader, test_loader, optimizer, scheduler)
             self.construct_dual_branch_network()
         else:
-            pass
+            self._network = self._network.module
         self.replace_fc(train_loader_for_protonet, self._network, None)
             
 
     def construct_dual_branch_network(self):
         network = MultiBranchCosineIncrementalNet(self.args, True)
-        network.construct_dual_branch_network(self._network)
+        network.construct_dual_branch_network(self._network.module)
         self._network=network.to(self._device)
 
     def _init_train(self, train_loader, test_loader, optimizer, scheduler):
@@ -129,6 +129,8 @@ class Learner(BaseLearner):
             correct, total = 0, 0
             for i, (_, inputs, targets) in enumerate(train_loader):
                 inputs, targets = inputs.to(self._device), targets.to(self._device)
+                # print(self._device)
+                # import pdb;pdb.set_trace()
                 logits = self._network(inputs)["logits"]
 
                 loss = F.cross_entropy(logits, targets)
@@ -140,6 +142,10 @@ class Learner(BaseLearner):
                 _, preds = torch.max(logits, dim=1)
                 correct += preds.eq(targets.expand_as(preds)).cpu().sum()
                 total += len(targets)
+                
+            # ! save ckpt
+            if epoch%5==0:
+                self.save_checkpoint(f"checkpoints/adam_adapter_epoch{epoch}")
 
             scheduler.step()
             train_acc = np.around(tensor2numpy(correct) * 100 / total, decimals=2)

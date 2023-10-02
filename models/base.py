@@ -8,7 +8,7 @@ from utils.toolkit import tensor2numpy, accuracy
 from scipy.spatial.distance import cdist
 
 EPSILON = 1e-8
-batch_size = 64
+# batch_size = 64
 
 class BaseLearner(object):
     def __init__(self, args):
@@ -25,6 +25,7 @@ class BaseLearner(object):
         self._fixed_memory = args.get("fixed_memory", False)
         self._device = args["device"][0]
         self._multiple_gpus = args["device"]
+        self.batch_size = args["batch_size"]
 
     @property
     def exemplar_size(self):
@@ -61,7 +62,7 @@ class BaseLearner(object):
         print('now draw tsne results of extracted features.')
         tot_classes=self._total_classes
         test_dataset = self.data_manager.get_dataset(np.arange(0, tot_classes), source='test', mode='test')
-        valloader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=4)
+        valloader = DataLoader(test_dataset, batch_size=self.batch_size, shuffle=False, num_workers=4)
         vectors, y_true = self._extract_vectors(valloader)
         if showcenters:
             fc_weight=self._network.fc.proj.cpu().detach().numpy()[:tot_classes]
@@ -89,13 +90,13 @@ class BaseLearner(object):
 
 
     def save_checkpoint(self, filename):
-        self._network.cpu()
+        # self._network.cpu()
         save_dict = {
             "tasks": self._cur_task,
             "model_state_dict": self._network.state_dict(),
         }
         torch.save(save_dict, "{}_{}.pkl".format(filename, self._cur_task))
-
+        
     def after_task(self):
         pass
 
@@ -139,7 +140,8 @@ class BaseLearner(object):
         model.eval()
         correct, total = 0, 0
         for i, (_, inputs, targets) in enumerate(loader):
-            inputs = inputs.to(self._device)
+            # inputs = inputs.to(self._device)
+            inputs = inputs.cuda()
             with torch.no_grad():
                 outputs = model(inputs)["logits"]
             predicts = torch.max(outputs, dim=1)[1]
@@ -152,7 +154,8 @@ class BaseLearner(object):
         self._network.eval()
         y_pred, y_true = [], []
         for _, (_, inputs, targets) in enumerate(loader):
-            inputs = inputs.to(self._device)
+            # inputs = inputs.to(self._device)
+            inputs = inputs.cuda()
             with torch.no_grad():
                 outputs = self._network(inputs)["logits"]
             predicts = torch.topk(
@@ -182,11 +185,13 @@ class BaseLearner(object):
             _targets = _targets.numpy()
             if isinstance(self._network, nn.DataParallel):
                 _vectors = tensor2numpy(
-                    self._network.module.extract_vector(_inputs.to(self._device))
+                    # self._network.module.extract_vector(_inputs.to(self._device))
+                    self._network.module.extract_vector(_inputs.cuda())
                 )
             else:
                 _vectors = tensor2numpy(
-                    self._network.extract_vector(_inputs.to(self._device))
+                    # self._network.extract_vector(_inputs.to(self._device))
+                    self._network.extract_vector(_inputs.cuda())
                 )
 
             vectors.append(_vectors)
@@ -221,7 +226,7 @@ class BaseLearner(object):
                 [], source="train", mode="test", appendent=(dd, dt)
             )
             idx_loader = DataLoader(
-                idx_dataset, batch_size=batch_size, shuffle=False, num_workers=4
+                idx_dataset, batch_size=self.batch_size, shuffle=False, num_workers=4
             )
             vectors, _ = self._extract_vectors(idx_loader)
             vectors = (vectors.T / (np.linalg.norm(vectors.T, axis=0) + EPSILON)).T
@@ -240,7 +245,7 @@ class BaseLearner(object):
                 ret_data=True,
             )
             idx_loader = DataLoader(
-                idx_dataset, batch_size=batch_size, shuffle=False, num_workers=4
+                idx_dataset, batch_size=self.batch_size, shuffle=False, num_workers=4
             )
             vectors, _ = self._extract_vectors(idx_loader)
             vectors = (vectors.T / (np.linalg.norm(vectors.T, axis=0) + EPSILON)).T
@@ -292,7 +297,7 @@ class BaseLearner(object):
                 appendent=(selected_exemplars, exemplar_targets),
             )
             idx_loader = DataLoader(
-                idx_dataset, batch_size=batch_size, shuffle=False, num_workers=4
+                idx_dataset, batch_size=self.batch_size, shuffle=False, num_workers=4
             )
             vectors, _ = self._extract_vectors(idx_loader)
             vectors = (vectors.T / (np.linalg.norm(vectors.T, axis=0) + EPSILON)).T
@@ -319,7 +324,7 @@ class BaseLearner(object):
                 [], source="train", mode="test", appendent=(class_data, class_targets)
             )
             class_loader = DataLoader(
-                class_dset, batch_size=batch_size, shuffle=False, num_workers=4
+                class_dset, batch_size=self.batch_size, shuffle=False, num_workers=4
             )
             vectors, _ = self._extract_vectors(class_loader)
             vectors = (vectors.T / (np.linalg.norm(vectors.T, axis=0) + EPSILON)).T
@@ -337,7 +342,7 @@ class BaseLearner(object):
                 ret_data=True,
             )
             class_loader = DataLoader(
-                class_dset, batch_size=batch_size, shuffle=False, num_workers=4
+                class_dset, batch_size=self.batch_size, shuffle=False, num_workers=4
             )
 
             vectors, _ = self._extract_vectors(class_loader)
@@ -389,7 +394,7 @@ class BaseLearner(object):
                 appendent=(selected_exemplars, exemplar_targets),
             )
             exemplar_loader = DataLoader(
-                exemplar_dset, batch_size=batch_size, shuffle=False, num_workers=4
+                exemplar_dset, batch_size=self.batch_size, shuffle=False, num_workers=4
             )
             vectors, _ = self._extract_vectors(exemplar_loader)
             vectors = (vectors.T / (np.linalg.norm(vectors.T, axis=0) + EPSILON)).T

@@ -8,17 +8,17 @@ from utils.toolkit import count_parameters
 import os
 
 
-def train(args):
+def train(args, tag, mode="train"):
     seed_list = copy.deepcopy(args["seed"])
     device = copy.deepcopy(args["device"])
 
     for seed in seed_list:
         args["seed"] = seed
         args["device"] = device
-        _train(args)
+        _train(args, tag, mode)
 
 
-def _train(args):
+def _train(args, tag, mode):
 
     init_cls = 0 if args ["init_cls"] == args["increment"] else args["init_cls"]
     logs_name = "logs/{}/{}/{}/{}".format(args["model_name"],args["dataset"], init_cls, args['increment'])
@@ -26,14 +26,21 @@ def _train(args):
     if not os.path.exists(logs_name):
         os.makedirs(logs_name)
 
-    logfilename = "logs/{}/{}/{}/{}/{}_{}_{}".format(
+    # logfilename = "logs/{}/{}/{}/{}/{}_{}_{}".format(
+    #     args["model_name"],
+    #     args["dataset"],
+    #     init_cls,
+    #     args["increment"],
+    #     args["prefix"],
+    #     args["seed"],
+    #     args["convnet_type"],
+    # )
+    logfilename = "logs/{}/{}/{}/{}/{}".format(
         args["model_name"],
         args["dataset"],
         init_cls,
         args["increment"],
-        args["prefix"],
-        args["seed"],
-        args["convnet_type"],
+        tag
     )
     logging.basicConfig(
         level=logging.INFO,
@@ -62,7 +69,16 @@ def _train(args):
         logging.info(
             "Trainable params: {}".format(count_parameters(model._network, True))
         )
-        model.incremental_train(data_manager)
+        if mode=="train":
+            model.incremental_train(data_manager, mode="train")
+        
+        if mode=="eval":
+            # load model, fixed cur_task=1
+            ckpt_path = f'checkpoints/minghao_lr({args["init_lr"]})_wd({args["weight_decay"]})_opt({args["optimizer"]})_0.pkl'
+            state_dict = torch.load(ckpt_path)
+            model.state_dict = state_dict
+            model.incremental_train(data_manager, mode="eval")
+            
         cnn_accy, nme_accy = model.eval_task()
         model.after_task()
 

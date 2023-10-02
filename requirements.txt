@@ -1,0 +1,20 @@
+accimage @ file:///home/conda/feedstock_root/build_artifacts/accimage_1694355636050/work
+certifi==2023.7.22
+charset-normalizer==3.3.0
+easydict==1.10
+filelock==3.12.4
+fsspec==2023.9.2
+huggingface-hub==0.17.3
+idna==3.4
+numpy==1.26.0
+packaging==23.1
+Pillow==10.0.1
+PyYAML==6.0.1
+requests==2.31.0
+scipy==1.11.3
+timm==0.6.12
+torch==1.11.0
+torchvision==0.12.0
+tqdm==4.66.1
+typing_extensions==4.8.0
+urllib3==2.0.5

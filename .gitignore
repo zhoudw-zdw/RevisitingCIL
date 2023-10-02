@@ -1,0 +1,4 @@
+# files to ignore
+*.jpg
+*.pyc
+*.pkl
