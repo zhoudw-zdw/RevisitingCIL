@@ -2,3 +2,6 @@
 *.jpg
 *.pyc
 *.pkl
+
+# directories to ignore
+data/

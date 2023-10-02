@@ -69,8 +69,11 @@ def _train(args, tag, mode):
         logging.info(
             "Trainable params: {}".format(count_parameters(model._network, True))
         )
+        
+        # only train to search best hyper-parameters
         if mode=="train":
             model.incremental_train(data_manager, mode="train")
+            continue
         
         if mode=="eval":
             # load model, fixed cur_task=1
@@ -78,7 +81,7 @@ def _train(args, tag, mode):
             state_dict = torch.load(ckpt_path)
             model.state_dict = state_dict
             model.incremental_train(data_manager, mode="eval")
-            
+        
         cnn_accy, nme_accy = model.eval_task()
         model.after_task()
 

@@ -19,7 +19,7 @@
         1993
     ],
     "tuned_epoch": 20,
-    "init_lr": 0.002,
+    "init_lr": 0.04,
     "batch_size": 768,
     "weight_decay": 0.0005,
     "min_lr": 0,

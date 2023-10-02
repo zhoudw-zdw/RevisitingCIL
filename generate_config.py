@@ -7,11 +7,11 @@ with open('./configs/minghaocil_omnibenchmark.json', 'r') as f:
 
 # 2. Set the parameters
 for opt in ['sgd','adam']:
-    for lr in [0.002,0.003,0.004,0.005,0.006,0.007,0.008,0.009,0.01,0.02,0.03,0.04,0.05]:
+    for lr in [0.002,0.005,0.008,0.01,0.02,0.03,0.04,0.05]:
         for wd in [0.0005,0.001,0.002,0.003,0.004,0.005]:
             if opt == 'adam':
                 continue
-            with open(f'./configs/exps/minghaocil_lr({lr})_wd({wd})_opt({opt}).json', 'w') as f:
+            with open(f'./configs/exps2/minghaocil_lr({lr})_wd({wd})_opt({opt}).json', 'w') as f:
                 config['weight_decay'] = wd
                 config['init_lr'] = lr
                 config['optimizer'] = opt
