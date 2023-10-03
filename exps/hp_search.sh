@@ -1,7 +1,7 @@
 #!/bin/bash
 
 cnt=0
-export CUDA_VISIBLE_DEVICES=1,2,3
+export CUDA_VISIBLE_DEVICES=0,1,2,3
 
 for file in configs/exps/*; do
     if [[ $file =~ .*adam_vt_deep_loss_cross_entropy.* ]]; then

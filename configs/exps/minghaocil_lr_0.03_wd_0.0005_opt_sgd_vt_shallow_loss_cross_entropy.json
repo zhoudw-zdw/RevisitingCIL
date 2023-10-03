@@ -26,6 +26,6 @@
     "ffn_num": 64,
     "optimizer": "sgd",
     "vpt_type": "shallow",
-    "prompt_token_num": 3,
+    "prompt_token_num": 5,
     "loss_fn": "cross_entropy"
 }

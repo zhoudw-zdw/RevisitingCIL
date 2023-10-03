@@ -26,4 +26,5 @@ for loss_fn in ['cross_entropy','focal_loss']:
                         config["batch_size"] = int(768/4*len(config["device"]))
                         config["tuned_epoch"] = 20
                         config["loss_fn"] = loss_fn
+                        config["prompt_token_num"] = 5
                         json.dump(config, f, indent=4)
