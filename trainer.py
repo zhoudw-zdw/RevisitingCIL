@@ -66,12 +66,17 @@ def _train(args, tag, mode):
             model.incremental_train(data_manager, mode="train")
             continue
         
-        if mode=="eval":
+        elif mode=="eval":
             # load model, fixed cur_task=1
             ckpt_path = f'checkpoints/minghao_lr({args["init_lr"]})_wd({args["weight_decay"]})_opt({args["optimizer"]})_0.pkl'
             state_dict = torch.load(ckpt_path)
             model.state_dict = state_dict
             model.incremental_train(data_manager, mode="eval")
+        
+        elif mode=="train-eval":
+            model.incremental_train(data_manager, mode="train")
+        else:
+            raise ValueError('mode must be "train", "eval" or "train-eval"')
         
         cnn_accy, nme_accy = model.eval_task()
         model.after_task()

@@ -21,7 +21,7 @@ for loss_fn in ['cross_entropy','focal_loss']:
                         config['weight_decay'] = wd
                         config['init_lr'] = lr
                         config['optimizer'] = opt
-                        config["device"] = ["0","1","2"]
+                        config["device"] = ["0","1","2","3"]
                         config["vpt_type"] = vpt_type
                         config["batch_size"] = int(768/4*len(config["device"]))
                         config["tuned_epoch"] = 20
