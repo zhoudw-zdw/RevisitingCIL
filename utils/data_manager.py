@@ -29,7 +29,7 @@ class DataManager(object):
         return len(self._class_order)
 
     def get_dataset(
-        self, indices, source, mode, appendent=None, ret_data=False, m_rate=None
+        self, indices, source, mode, appendent=None, ret_data=False, m_rate=None, flip_prob=0.5
     ):
         if source == "train":
             x, y = self._train_data, self._train_targets
@@ -50,6 +50,14 @@ class DataManager(object):
             )
         elif mode == "test":
             trsf = transforms.Compose([*self._test_trsf, *self._common_trsf])
+        elif mode == "random_flip":
+            trsf = transforms.Compose(
+                [
+                    *self._test_trsf,
+                    transforms.RandomHorizontalFlip(p=flip_prob),
+                    *self._common_trsf,
+                ]
+            )
         else:
             raise ValueError("Unknown mode {}.".format(mode))
 

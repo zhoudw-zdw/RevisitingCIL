@@ -11,12 +11,12 @@ for loss_fn in ['cross_entropy','focal_loss']:
         for opt in ['sgd','adam']:
             for lr in [0.005,0.01,0.02,0.03,0.04,0.05]:
                 for wd in [0.0005,0.001,0.002,0.003,0.004,0.005]:
-                    if opt == 'adam':
-                        continue
-                    if vpt_type == 'shallow':
-                        continue
-                    if loss_fn == 'focal_loss':
-                        continue
+                    # if opt == 'adam':
+                    #     continue
+                    # if vpt_type == 'shallow':
+                    #     continue
+                    # if loss_fn == 'cross_entropy':
+                    #     continue
                     with open(f'./configs/exps/minghaocil_lr_{lr}_wd_{wd}_opt_{opt}_vt_{vpt_type}_loss_{loss_fn}.json', 'w') as f:
                         config['weight_decay'] = wd
                         config['init_lr'] = lr

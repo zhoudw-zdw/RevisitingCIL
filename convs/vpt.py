@@ -3,16 +3,16 @@ import torch
 import torch.nn as nn
 from timm.models.vision_transformer import VisionTransformer, PatchEmbed
 
-def build_promptmodel(modelname='vit_base_patch16_224',  Prompt_Token_num=10, VPT_type="Deep"):
+def build_promptmodel(modelname='vit_base_patch16_224',  Prompt_Token_num=10, VPT_type="deep"):
     
-    # VPT_type = "Deep" / "Shallow"
+    # VPT_type = "deep" / "shallow"
     edge_size=224
     patch_size=16  
     num_classes=1000 if modelname == 'vit_base_patch16_224' else 21843
     basic_model = timm.create_model(modelname, pretrained=True)
     model = VPT_ViT(Prompt_Token_num=Prompt_Token_num,VPT_type=VPT_type)
     # model.New_CLS_head(num_classes)
-    import pdb; pdb.set_trace()
+    # import pdb; pdb.set_trace()
     # drop head.weight and head.bias
     basicmodeldict=basic_model.state_dict()
     basicmodeldict.pop('head.weight')
@@ -31,7 +31,7 @@ class VPT_ViT(VisionTransformer):
     def __init__(self, img_size=224, patch_size=16, in_chans=3, num_classes=1000, embed_dim=768, depth=12,
                  num_heads=12, mlp_ratio=4., qkv_bias=True, drop_rate=0., attn_drop_rate=0., drop_path_rate=0.,
                  embed_layer=PatchEmbed, norm_layer=None, act_layer=None, Prompt_Token_num=1,
-                 VPT_type="Shallow", basic_state_dict=None):
+                 VPT_type="shallow", basic_state_dict=None):
 
         # Recreate ViT
         super().__init__(img_size=img_size, patch_size=patch_size, in_chans=in_chans, num_classes=num_classes,
@@ -46,11 +46,15 @@ class VPT_ViT(VisionTransformer):
             self.load_state_dict(basic_state_dict, False)
 
         self.VPT_type = VPT_type
-        if VPT_type == "Deep":
+        
+        # ! regularize the code !!!
+        if VPT_type == "deep":
             self.Prompt_Tokens = nn.Parameter(torch.zeros(depth, Prompt_Token_num, embed_dim))
-        else:  # "Shallow"
+        elif VPT_type == "shallow":
             self.Prompt_Tokens = nn.Parameter(torch.zeros(1, Prompt_Token_num, embed_dim))
-
+        else:
+            raise NotImplementedError('VPT_type must be "deep" or "shallow"')
+            
     def New_CLS_head(self, new_classes=15):
         self.head = nn.Linear(self.embed_dim, new_classes)
 
@@ -106,7 +110,7 @@ class VPT_ViT(VisionTransformer):
         x = torch.cat((cls_token, x), dim=1)
         x = self.pos_drop(x + self.pos_embed)
 
-        if self.VPT_type == "Deep":
+        if self.VPT_type == "deep":
 
             Prompt_Token_num = self.Prompt_Tokens.shape[1]
 
@@ -119,7 +123,7 @@ class VPT_ViT(VisionTransformer):
                 # lastly remove, a genius trick
                 x = self.blocks[i](x)[:, :num_tokens - Prompt_Token_num]
 
-        else:  # self.VPT_type == "Shallow"
+        else:  # self.VPT_type == "shallow"
             Prompt_Token_num = self.Prompt_Tokens.shape[1]
 
             # concatenate Prompt_Tokens

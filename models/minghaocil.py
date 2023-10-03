@@ -23,18 +23,15 @@ class Learner(BaseLearner):
         self._network = SimpleVitNet(args, True)
         
         # ! VPT
-        model = VPT_ViT(Prompt_Token_num=10,VPT_type=args["vpt_type"])
-        # drop head.weight and head.bias
-        basicmodeldict=self._network.convnet.state_dict()
-        # import pdb; pdb.set_trace()
-        # basicmodeldict.pop('head.weight')
-        # basicmodeldict.pop('head.bias')
-        model.load_state_dict(basicmodeldict, False)
-        model.head = torch.nn.Identity()
-        model.Freeze()
+        model = build_promptmodel(
+            modelname='vit_base_patch16_224_in21k',  
+            Prompt_Token_num=args["prompt_token_num"], 
+            VPT_type=args["vpt_type"])
         prompt_state_dict = model.obtain_prompt()
         model.load_prompt(prompt_state_dict)
         model.eval()
+        model.out_dim=768
+        self._network.convnet = model
         
         # configs
         self.batch_size= args["batch_size"]
@@ -91,7 +88,7 @@ class Learner(BaseLearner):
         logging.info("Learning on {}-{}".format(self._known_classes, self._total_classes))
 
         # ! Data augmentation, using random flip
-        train_dataset = data_manager.get_dataset(np.arange(self._known_classes, self._total_classes),source="train", mode="flip")
+        train_dataset = data_manager.get_dataset(np.arange(self._known_classes, self._total_classes),source="train", mode="random_flip", flip_prob=0.5)
         self.train_dataset=train_dataset
         self.data_manager=data_manager
         self.train_loader = DataLoader(train_dataset, batch_size=self.batch_size, shuffle=True, num_workers=num_workers)
@@ -100,7 +97,7 @@ class Learner(BaseLearner):
         self.test_loader = DataLoader(test_dataset, batch_size=self.batch_size, shuffle=False, num_workers=num_workers)
         
         # ! Data augmentation, using random flip
-        train_dataset_for_protonet=data_manager.get_dataset(np.arange(self._known_classes, self._total_classes),source="train", mode="flip")
+        train_dataset_for_protonet=data_manager.get_dataset(np.arange(self._known_classes, self._total_classes),source="train", mode="random_flip", flip_prob=0.5)
         self.train_loader_for_protonet = DataLoader(train_dataset_for_protonet, batch_size=self.batch_size, shuffle=True, num_workers=num_workers)
         if len(self._multiple_gpus) > 1:
             print('Multiple GPUs')
@@ -195,16 +192,25 @@ class Learner(BaseLearner):
             scheduler.step()
             train_acc = np.around(tensor2numpy(correct) * 100 / total, decimals=2)
 
-            test_acc = self._compute_accuracy(self._network, test_loader)
-            info = "Task {}, Epoch {}/{} => Loss {:.3f}, Train_accy {:.2f}, Test_accy {:.2f}".format(
-                self._cur_task,
-                epoch + 1,
-                self.args['tuned_epoch'],
-                losses / len(train_loader),
-                train_acc,
-                test_acc,
-            )
-            prog_bar.set_description(info)
+            if epoch % 5 == 0:
+                info = "Task {}, Epoch {}/{} => Loss {:.3f}, Train_accy {:.2f}".format(
+                    self._cur_task,
+                    epoch + 1,
+                    self.args['tuned_epoch'],
+                    losses / len(train_loader),
+                    train_acc,
+                )
+            else:
+                test_acc = self._compute_accuracy(self._network, test_loader)
+                info = "Task {}, Epoch {}/{} => Loss {:.3f}, Train_accy {:.2f}, Test_accy {:.2f}".format(
+                    self._cur_task,
+                    epoch + 1,
+                    self.args['tuned_epoch'],
+                    losses / len(train_loader),
+                    train_acc,
+                    test_acc,
+                )
+            prog_bar.set_description(info, refresh=False)
         # ! save ckpt
-        self.save_checkpoint(f'checkpoints/minghao_lr({self.init_lr})_wd({self.weight_decay})_opt({self.args["optimizer"]})')
+        self.save_checkpoint(f'checkpoints/minghao_lr({self.init_lr})_wd({self.weight_decay})_opt({self.args["optimizer"]})_vt({self.args["vpt_type"]})_loss({self.loss_fn})_epoch({self.args["tuned_epoch"]})')
         logging.info(info)

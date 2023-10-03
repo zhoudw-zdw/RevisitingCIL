@@ -75,6 +75,7 @@ def _train(args, tag, mode):
         
         elif mode=="train-eval":
             model.incremental_train(data_manager, mode="train")
+            
         else:
             raise ValueError('mode must be "train", "eval" or "train-eval"')
         

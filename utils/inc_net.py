@@ -65,9 +65,11 @@ def get_convnet(args, pretrained=False):
                 basicmodelname="vit_base_patch16_224_in21k"
             
             print("modelname,",name,"basicmodelname",basicmodelname)
-            VPT_type="Deep"
-            if args["vpt_type"]=='shallow':
-                VPT_type="Shallow"
+            # ! regularize the code !!!
+            # VPT_type="Deep"
+            # if args["vpt_type"]=='shallow':
+            #     VPT_type="Shallow"
+            VPT_type=args["vpt_type"]
             Prompt_Token_num=args["prompt_token_num"]
 
             model = build_promptmodel(modelname=basicmodelname,  Prompt_Token_num=Prompt_Token_num, VPT_type=VPT_type)

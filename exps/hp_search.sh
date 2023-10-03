@@ -4,7 +4,7 @@ cnt=0
 export CUDA_VISIBLE_DEVICES=1,2,3
 
 for file in configs/exps/*; do
-    if [ -f "$file" ]; then
+    if [[ $file =~ .*adam_vt_deep_loss_cross_entropy.* ]]; then
         echo "$file"
         
         # ((cnt++))

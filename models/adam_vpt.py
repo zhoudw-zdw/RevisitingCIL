@@ -11,6 +11,7 @@ from utils.inc_net import IncrementalNet,SimpleCosineIncrementalNet,MultiBranchC
 from models.base import BaseLearner
 from utils.toolkit import target2onehot, tensor2numpy
 
+from torchvision.ops.focal_loss import sigmoid_focal_loss
 # tune the model at first session with vpt, and then conduct simple shot.
 num_workers = 8
 
@@ -27,13 +28,24 @@ class Learner(BaseLearner):
             self.init_lr=args["init_lr"] if args["init_lr"] is not None else  0.01
         else:
             self._network = SimpleVitNet(args, True)
-            self. batch_size= args["batch_size"]
-            self. init_lr=args["init_lr"]
-        
+            self.batch_size= args["batch_size"]
+            self.init_lr=args["init_lr"]
+        # configs
+        self.batch_size= args["batch_size"]
+        self.init_lr=args["init_lr"]
         self.weight_decay=args["weight_decay"] if args["weight_decay"] is not None else 0.0005
         self.min_lr=args['min_lr'] if args['min_lr'] is not None else 1e-8
+        self.loss_fn=args['loss_fn'] if args['loss_fn'] is not None else 'cross_entropy'
         self.args=args
-
+        
+    def load_checkpoint(self, state_dict):
+        self.state_dict = state_dict
+        # if len(self._multiple_gpus) > 1:
+        #     # replace "module." in state_dict
+        #     for k in list(state_dict["model_state_dict"].keys()):
+        #         if k.startswith("module."):
+        #             state_dict["model_state_dict"][k[7:]] = state_dict["model_state_dict"].pop(k)
+        self._network.load_state_dict(state_dict["model_state_dict"], strict=True)
     def after_task(self):
         self._known_classes = self._total_classes
     
@@ -67,7 +79,7 @@ class Learner(BaseLearner):
 
 
 
-    def incremental_train(self, data_manager):
+    def incremental_train(self, data_manager, mode="train"):
         self._cur_task += 1
         self._total_classes = self._known_classes + data_manager.get_task_size(self._cur_task)
         self._network.update_fc(self._total_classes)
@@ -86,49 +98,61 @@ class Learner(BaseLearner):
         if len(self._multiple_gpus) > 1:
             print('Multiple GPUs')
             self._network = nn.DataParallel(self._network, self._multiple_gpus)
-        self._train(self.train_loader, self.test_loader, self.train_loader_for_protonet)
-        if len(self._multiple_gpus) > 1:
-            self._network = self._network.module
+        self._train(self.train_loader, self.test_loader, self.train_loader_for_protonet,mode=mode)
+        # if len(self._multiple_gpus) > 1:
+        #     self._network = self._network.module
 
-    def _train(self, train_loader, test_loader, train_loader_for_protonet):
-        
-        self._network.to(self._device)
+    def _train(self, train_loader, test_loader, train_loader_for_protonet, mode="train"):
+        self._network.cuda()
         
         
         if self._cur_task == 0:
-
-            # Freeze the parameters for ViT.
-            total_params = sum(p.numel() for p in self._network.parameters())
-            print(f'{total_params:,} total parameters.')
-            total_trainable_params = sum(
-                p.numel() for p in self._network.parameters() if p.requires_grad)
-            print(f'{total_trainable_params:,} training parameters.')
-
-            # if some parameters are trainable, print the key name and corresponding parameter number
-            if total_params != total_trainable_params:
-                for name, param in self._network.named_parameters():
-                    if param.requires_grad:
-                        print(name, param.numel())
-
-            if self.args['optimizer']=='sgd':
-                optimizer = optim.SGD(self._network.parameters(), momentum=0.9, lr=self.init_lr,weight_decay=self.weight_decay)
-            elif self.args['optimizer']=='adam':
-                optimizer=optim.AdamW(self._network.parameters(), lr=self.init_lr, weight_decay=self.weight_decay)
-            # optimizer=optim.AdamW(self._network.parameters(), lr=self.init_lr, weight_decay=self.weight_decay)
-            scheduler=optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=self.args['tuned_epoch'], eta_min=self.min_lr)
-
-            self._init_train(train_loader, test_loader, optimizer, scheduler)
+            if mode=="eval":
+                logging.info("Load model from state dict")
+                self.load_checkpoint(self.state_dict)
+            elif mode=="train":
+                logging.info("Init train")
+                # show total parameters and trainable parameters
+                total_params = sum(p.numel() for p in self._network.parameters())
+                print(f'{total_params:,} total parameters.')
+                total_trainable_params = sum(
+                    p.numel() for p in self._network.parameters() if p.requires_grad)
+                print(f'{total_trainable_params:,} training parameters.')
+                
+                if total_params != total_trainable_params:
+                    for name, param in self._network.named_parameters():
+                        if param.requires_grad:
+                            print(name, param.numel())
+                
+                # ! Optimizer
+                if self.args['optimizer']=='sgd':
+                    optimizer = optim.SGD(
+                        self._network.parameters(), 
+                        momentum=0.9, 
+                        lr=self.init_lr,
+                        weight_decay=self.weight_decay)
+                elif self.args['optimizer']=='adam':
+                    optimizer=optim.AdamW(
+                        self._network.parameters(), 
+                        lr=self.init_lr, 
+                        weight_decay=self.weight_decay)
+                scheduler=optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=self.args['tuned_epoch'], eta_min=self.min_lr)
+                self._init_train(train_loader, test_loader, optimizer, scheduler)
             self.construct_dual_branch_network()
         else:
-            pass
-        
+            if len(self._multiple_gpus) > 1:
+                self._network = self._network.module
         self.replace_fc(train_loader_for_protonet, self._network, None)
             
 
     def construct_dual_branch_network(self):
         network = MultiBranchCosineIncrementalNet(self.args, True)
-        network.construct_dual_branch_network(self._network)
-        self._network=network.to(self._device)
+        if len(self._multiple_gpus) > 1:
+            network.construct_dual_branch_network(self._network.module)
+        else:
+            network.construct_dual_branch_network(self._network)
+        # self._network=network.to(self._device)
+        self._network=network.cuda()
 
     def _init_train(self, train_loader, test_loader, optimizer, scheduler):
         prog_bar = tqdm(range(self.args['tuned_epoch']))
@@ -137,10 +161,16 @@ class Learner(BaseLearner):
             losses = 0.0
             correct, total = 0, 0
             for i, (_, inputs, targets) in enumerate(train_loader):
-                inputs, targets = inputs.to(self._device), targets.to(self._device)
+                inputs, targets = inputs.cuda(), targets.cuda()
                 logits = self._network(inputs)["logits"]
 
-                loss = F.cross_entropy(logits, targets)
+                # ! Loss function, using focal loss
+                if self.loss_fn == "cross_entropy":
+                    loss = F.cross_entropy(logits, targets)
+                elif self.loss_fn == "focal_loss":
+                    loss = sigmoid_focal_loss(logits, targets, alpha=0.25, gamma=2.0, reduction="mean")
+                else:
+                    raise NotImplementedError
                 optimizer.zero_grad()
                 loss.backward()
                 optimizer.step()
@@ -172,7 +202,6 @@ class Learner(BaseLearner):
                     test_acc,
                 )
             prog_bar.set_description(info)
-
+        # ! save ckpt
+        self.save_checkpoint(f'checkpoints/minghao_lr({self.init_lr})_wd({self.weight_decay})_opt({self.args["optimizer"]})_vt({self.args["vpt_type"]})_loss({self.loss_fn})_epoch({self.args["tuned_epoch"]})')
         logging.info(info)
-
-    
