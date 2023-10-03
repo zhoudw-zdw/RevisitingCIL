@@ -144,6 +144,8 @@ class Learner(BaseLearner):
                         self._network.parameters(), 
                         lr=self.init_lr, 
                         weight_decay=self.weight_decay)
+                else:
+                    raise NotImplementedError
                 scheduler=optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=self.args['tuned_epoch'], eta_min=self.min_lr)
                 self._init_train(train_loader, test_loader, optimizer, scheduler)
             self.construct_dual_branch_network()
@@ -210,7 +212,8 @@ class Learner(BaseLearner):
                     train_acc,
                     test_acc,
                 )
-            prog_bar.set_description(info, refresh=False)
+            logging.info(info)
+            prog_bar.set_description(info)
         # ! save ckpt
         self.save_checkpoint(f'checkpoints/minghao_lr({self.init_lr})_wd({self.weight_decay})_opt({self.args["optimizer"]})_vt({self.args["vpt_type"]})_loss({self.loss_fn})_epoch({self.args["tuned_epoch"]})')
         logging.info(info)

@@ -13,9 +13,9 @@
     "seed": [1993],
     
     "tuned_epoch":20,
-    "init_lr":0.03,
+    "init_lr":0.01,
     "batch_size":48,
-    "weight_decay":0.001,
+    "weight_decay":0.0005,
     "min_lr":0,
     "optimizer":"sgd",
     "vpt_type":"deep",

@@ -3,7 +3,8 @@ import re
 
 if __name__ == '__main__':
     folder_path = 'logs/minghaocil/omnibenchmark/0/30'
-    pattern = r'minghaocil_lr_(\d+\.\d+)_wd_(\d+\.\d+)_opt_sgd_vt_deep_loss_cross_entropy.log'
+    # pattern = r'minghaocil_lr_(\d+\.\d+)_wd_(\d+\.\d+)_opt_sgd_vt_deep_loss_cross_entropy.log'
+    pattern = r'minghaocil_lr_(\d+\.\d+)_wd_(\d+\.\d+)_opt_adam_vt_deep_loss_cross_entropy.log'
     text_pattern = r"Loss (\d+\.\d+), Train_accy (\d+\.\d+), Test_accy (\d+\.\d+)"
     for file_name in os.listdir(folder_path):
         file_path = os.path.join(folder_path, file_name)
