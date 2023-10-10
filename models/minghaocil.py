@@ -88,7 +88,8 @@ class Learner(BaseLearner):
             proto_list.append(proto)
             # self._network.fc.weight.data[class_index]=proto
             # ! Maintain partial fc weight
-            self._network.fc.weight.data[class_index] = (1 - self.alpha) * self._network.fc.weight.data[class_index] + self.alpha * proto
+            # import pdb; pdb.set_trace()
+            self._network.fc.weight.data[class_index] = (1 - self.alpha) * self._network.fc.weight.data[class_index].cpu() + self.alpha * proto
             if self._cur_task == 0:
                 cov = np.cov(embedding.T)
                 radius.append(np.trace(cov) / embedding_list.shape[1])
@@ -131,8 +132,9 @@ class Learner(BaseLearner):
         return proto_tensor
         
         
-    def incremental_train(self, data_manager, mode="train"):
+    def incremental_train(self, data_manager, mode="train", tag=None):
         self._cur_task += 1
+        self.tag = tag
         self._total_classes = self._known_classes + data_manager.get_task_size(self._cur_task)
         self._network.update_fc(self._total_classes)
         logging.info("Learning on {}-{}".format(self._known_classes, self._total_classes))
@@ -204,7 +206,10 @@ class Learner(BaseLearner):
                 self._init_train(train_loader, test_loader, optimizer, scheduler)  
         else:
             if len(self._multiple_gpus) > 1:
-                self._network = self._network.module
+                if type(self._network) == nn.DataParallel:
+                    self._network = self._network.module
+        if type(self._network) == nn.DataParallel:
+            self._network=self._network.module.cuda()
         self.replace_fc(train_loader_for_protonet, self._network, None)
 
     def construct_dual_branch_network(self):
@@ -304,5 +309,6 @@ class Learner(BaseLearner):
             logging.info(info)
             prog_bar.set_description(info)
         # ! save ckpt
-        self.save_checkpoint(f'checkpoints/minghao_lr({self.init_lr})_wd({self.weight_decay})_opt({self.args["optimizer"]})_vt({self.args["vpt_type"]})_loss({self.loss_fn})_epoch({self.args["tuned_epoch"]})')
+        # self.save_checkpoint(f'checkpoints/minghao_lr({self.init_lr})_wd({self.weight_decay})_opt({self.args["optimizer"]})_vt({self.args["vpt_type"]})_loss({self.loss_fn})_epoch({self.args["tuned_epoch"]})')
+        self.save_checkpoint(f'checkpoints/{self.tag}_epoch({self.args["tuned_epoch"]})')
         logging.info(info)

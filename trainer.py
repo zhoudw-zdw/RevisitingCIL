@@ -68,13 +68,15 @@ def _train(args, tag, mode):
         
         elif mode=="eval":
             # load model, fixed cur_task=1
-            ckpt_path = f'checkpoints/minghao_lr({args["init_lr"]})_wd({args["weight_decay"]})_opt({args["optimizer"]})_0.pkl'
+            # ckpt_path = f'checkpoints/minghao_lr({args["init_lr"]})_wd({args["weight_decay"]})_opt({args["optimizer"]})_vt({args["vpt_type"]})_loss({args["loss_fn"]})_epoch({args["tuned_epoch"]})_0.pkl'
+            ckpt_path = f'checkpoints/{tag}_epoch({args["tuned_epoch"]})_0.pkl'
+            # 'checkpoints/minghao_lr({self.init_lr})_wd({self.weight_decay})_opt({self.args["optimizer"]})_vt({self.args["vpt_type"]})_loss({self.loss_fn})_epoch({self.args["tuned_epoch"]})
             state_dict = torch.load(ckpt_path)
             model.state_dict = state_dict
             model.incremental_train(data_manager, mode="eval")
         
         elif mode=="train-eval":
-            model.incremental_train(data_manager, mode="train")
+            model.incremental_train(data_manager, mode="train", tag=tag)
             
         else:
             raise ValueError('mode must be "train", "eval" or "train-eval"')
