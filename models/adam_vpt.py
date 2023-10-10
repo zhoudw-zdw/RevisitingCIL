@@ -168,7 +168,8 @@ class Learner(BaseLearner):
                 if self.loss_fn == "cross_entropy":
                     loss = F.cross_entropy(logits, targets)
                 elif self.loss_fn == "focal_loss":
-                    loss = sigmoid_focal_loss(logits, targets, alpha=0.25, gamma=2.0, reduction="mean")
+                    targets_onehot = torch.zeros(targets.size(0), 30).to(targets.device).scatter_(1, targets.unsqueeze(1), 1)
+                    loss = sigmoid_focal_loss(logits, targets_onehot, alpha=0.25, gamma=2.0, reduction="mean")
                 else:
                     raise NotImplementedError
                 optimizer.zero_grad()

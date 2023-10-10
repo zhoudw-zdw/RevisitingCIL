@@ -1,6 +1,7 @@
 import logging
 import numpy as np
 from PIL import Image
+import random
 from torch.utils.data import Dataset
 from torchvision import transforms
 from utils.data import iCIFAR10, iCIFAR100, iImageNet100, iImageNet1000, iCIFAR224, iImageNetR,iImageNetA,CUB, objectnet, omnibenchmark, vtab
@@ -29,8 +30,8 @@ class DataManager(object):
         return len(self._class_order)
 
     def get_dataset(
-        self, indices, source, mode, appendent=None, ret_data=False, m_rate=None, flip_prob=0.5
-    ):
+        self, indices, source, mode, appendent=None, ret_data=False, m_rate=None, flip_prob=0.5,
+        rotation_degrees=[0,90,180,270]):
         if source == "train":
             x, y = self._train_data, self._train_targets
         elif source == "test":
@@ -43,18 +44,44 @@ class DataManager(object):
         elif mode == "flip":
             trsf = transforms.Compose(
                 [
-                    *self._test_trsf,
+                    *self._train_trsf,
                     transforms.RandomHorizontalFlip(p=1.0),
                     *self._common_trsf,
                 ]
             )
         elif mode == "test":
             trsf = transforms.Compose([*self._test_trsf, *self._common_trsf])
-        elif mode == "random_flip":
+        elif mode == "test_norm":
             trsf = transforms.Compose(
                 [
                     *self._test_trsf,
+                    transforms.ColorJitter(brightness=0.24705882352941178),
+                    transforms.Normalize((0.5071, 0.4867, 0.4408), (0.2675, 0.2565, 0.2761)),
+                    *self._common_trsf,
+                ]
+            )
+        elif mode == "random_flip":
+            trsf = transforms.Compose(
+                [
+                    *self._train_trsf,
                     transforms.RandomHorizontalFlip(p=flip_prob),
+                    *self._common_trsf,
+                ]
+            )
+        elif mode == "random_all":
+            def random_rotation(image):
+                if random.random() < flip_prob:
+                    degree = random.choice(rotation_degrees)
+                    image = transforms.functional.rotate(image, degree)
+                return image
+            trsf = transforms.Compose(
+                [
+                    *self._train_trsf,
+                    transforms.RandomHorizontalFlip(p=flip_prob),
+                    # transforms.RandomVerticalFlip(p=flip_prob),
+                    # transforms.Lambda(lambda x: random_rotation(x)),
+                    transforms.ColorJitter(brightness=0.24705882352941178),
+                    transforms.Normalize((0.5071, 0.4867, 0.4408), (0.2675, 0.2565, 0.2761)),
                     *self._common_trsf,
                 ]
             )
