@@ -9,20 +9,34 @@ from torch.nn import functional as F
 from torch.utils.data import DataLoader
 from utils.inc_net import IncrementalNet,SimpleCosineIncrementalNet,MultiBranchCosineIncrementalNet,SimpleVitNet
 from models.base import BaseLearner
-from utils.toolkit import target2onehot, tensor2numpy
+from utils.toolkit import target2onehot, tensor2numpy, count_parameters
 
 from torchvision.ops.focal_loss import sigmoid_focal_loss
 from convs.vpt import build_promptmodel, VPT_ViT
 
 num_workers = 8
 # batch_size=128
-
+def print_trainable_parameters(model):
+    trainable_params = 0
+    all_param = 0
+    trainable_params_list = []
+    for name, param in model.named_parameters():
+        all_param += param.numel()
+        if param.requires_grad:
+            print(name, param.numel())
+            trainable_params_list.append(name)
+            trainable_params += param.numel()
+    print(
+        f"trainable params: {trainable_params} || all params: {all_param} || trainable%: {100 * trainable_params / all_param:.2f}"
+    )
+    return trainable_params_list
+    
 class Learner(BaseLearner):
     def __init__(self, args):
         super().__init__(args)
         self._network = SimpleVitNet(args, True)
         
-        # ! VPT
+        # ! VPT to freeze
         model = build_promptmodel(
             modelname='vit_base_patch16_224_in21k',  
             Prompt_Token_num=args["prompt_token_num"], 
@@ -32,6 +46,12 @@ class Learner(BaseLearner):
         model.eval()
         model.out_dim=768
         self._network.convnet = model
+        
+        logging.info("All params: {}".format(count_parameters(self._network)))
+        logging.info(
+            "Trainable params: {}".format(count_parameters(self._network, True))
+        )
+        
         self.proto_list = []
         self.class_list = []
         self.radius = 0
@@ -132,12 +152,12 @@ class Learner(BaseLearner):
         proto_tensor = torch.stack(proto_list, dim=0).cuda()
         return proto_tensor
         
-        
     def incremental_train(self, data_manager, mode="train", tag=None):
         self._cur_task += 1
         self.tag = tag
         self._total_classes = self._known_classes + data_manager.get_task_size(self._cur_task)
         self._network.update_fc(self._total_classes)
+        
         logging.info("Learning on {}-{}".format(self._known_classes, self._total_classes))
 
         # ! Data augmentation, using random flip
@@ -153,10 +173,10 @@ class Learner(BaseLearner):
         train_dataset_for_protonet=data_manager.get_dataset(np.arange(self._known_classes, self._total_classes),source="train", mode='test_norm')
         self.train_loader_for_protonet = DataLoader(train_dataset_for_protonet, batch_size=self.batch_size, shuffle=True, num_workers=num_workers)
         
-        # ! Before DataParallel
-        # if len(self._multiple_gpus) > 1:
-        #     print('Multiple GPUs')
-        #     self._network = nn.DataParallel(self._network, self._multiple_gpus)
+        # ! After - DataParallel in advance
+        if len(self._multiple_gpus) > 1:
+            print('Multiple GPUs')
+            self._network = nn.DataParallel(self._network, self._multiple_gpus)
         self._train(
             self.train_loader,
             self.test_loader, 
@@ -170,7 +190,9 @@ class Learner(BaseLearner):
         
         # mihghao's solution
         if self._cur_task == 0:
-            self.construct_dual_branch_network()
+            # ! Before
+            # self.construct_dual_branch_network()
+            
             if mode=="eval":
                 logging.info("Load model from state dict")
                 self.load_checkpoint(self.state_dict)
@@ -205,6 +227,9 @@ class Learner(BaseLearner):
                 scheduler=optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=self.args['tuned_epoch'], eta_min=self.min_lr)
                 # scheduler=optim.lr_scheduler.StepLR(optimizer, step_size=10, gamma=0.1)
                 self._init_train(train_loader, test_loader, optimizer, scheduler)  
+                
+            # ! After
+            self.construct_dual_branch_network()
         else:
             if len(self._multiple_gpus) > 1:
                 if type(self._network) == nn.DataParallel:
@@ -216,22 +241,22 @@ class Learner(BaseLearner):
     def construct_dual_branch_network(self):
         network = MultiBranchCosineIncrementalNet(self.args, True)
         # ! After
-        # if len(self._multiple_gpus) > 1:
-        #     network.construct_dual_branch_network(self._network.module)
-        # else:
-        #     network.construct_dual_branch_network(self._network)
-        # self._network=network.cuda()
+        if len(self._multiple_gpus) > 1:
+            network.construct_dual_branch_network(self._network.module)
+        else:
+            network.construct_dual_branch_network(self._network)
+        self._network=network.cuda()
         
         # ! Before
-        network.construct_dual_branch_network(self._network)
-        if len(self._multiple_gpus) > 1:
-            print('Multiple GPUs')
-            self._network = nn.DataParallel(network, self._multiple_gpus).cuda()
+        # network.construct_dual_branch_network(self._network)
+        # if len(self._multiple_gpus) > 1:
+        #     print('Multiple GPUs')
+        #     self._network = nn.DataParallel(network, self._multiple_gpus).cuda()
 
     def _compute_prototype_loss(self, fc_weights, prototypes):
         # import pdb; pdb.set_trace()
         # loss = ((fc_weights - prototypes) ** 2).sum(1).mean()
-        loss = torch.pow(torch.dist(fc_weights, prototypes, p=2), self.beta)
+        loss = self.beta * torch.pow(torch.dist(fc_weights, prototypes, p=2), self.beta)
         return loss
     
     def _compute_loss(self, inputs, targets, proto_tensor=None, ifrot=False) -> torch.Tensor:
@@ -251,7 +276,9 @@ class Learner(BaseLearner):
             proto_loss = self._compute_prototype_loss(self._network.module.fc.weight.data, proto_tensor)                
             # Combine main loss and prototype loss
             loss = loss_cls + proto_loss
-        
+        else:
+            loss = loss_cls
+            
         return loss, logits
         
     def _init_train(self, train_loader, test_loader, optimizer, scheduler):
@@ -261,20 +288,21 @@ class Learner(BaseLearner):
             losses = 0.0
             correct, total = 0, 0
             
-            proto_tensor = self._get_proto_list(train_loader, self._network, None)
+            # proto_tensor = self._get_proto_list(train_loader, self._network, None)
             for i, (_, inputs, targets) in enumerate(train_loader):
                 # inputs, targets = inputs.to(self._device), targets.to(self._device)
                 inputs, targets = inputs.cuda(), targets.cuda()
                 # logits = self._network(inputs)["logits"]
                 
                 # ! PASS Loss
-                loss, logits = self._compute_loss(inputs, targets, proto_tensor)
+                # loss, logits = self._compute_loss(inputs, targets, proto_tensor)
+                loss, logits = self._compute_loss(inputs, targets)
                 
                 # ! Regularization
-                l2_regularization = torch.tensor(0.).cuda()
-                for param in self._network.parameters():
-                    l2_regularization += torch.norm(param, 2).cuda()
-                loss += self.weight_decay * l2_regularization
+                # l2_regularization = torch.tensor(0.).cuda()
+                # for param in self._network.parameters():
+                #     l2_regularization += torch.norm(param, 2).cuda()
+                # loss += self.weight_decay * l2_regularization
                 
                 optimizer.zero_grad()
                 loss.backward()

@@ -1,4 +1,4 @@
-accimage @ file:///home/conda/feedstock_root/build_artifacts/accimage_1694355636050/work
+# accimage @ file:///home/conda/feedstock_root/build_artifacts/accimage_1694355636050/work
 certifi==2023.7.22
 charset-normalizer==3.3.0
 easydict==1.10

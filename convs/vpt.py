@@ -2,6 +2,7 @@ import timm
 import torch
 import torch.nn as nn
 from timm.models.vision_transformer import VisionTransformer, PatchEmbed
+from utils.lora import LoRA_ViT_timm
 
 def build_promptmodel(modelname='vit_base_patch16_224',  Prompt_Token_num=10, VPT_type="deep"):
     
@@ -27,6 +28,7 @@ def build_promptmodel(modelname='vit_base_patch16_224',  Prompt_Token_num=10, VP
     return model
 
 
+
 class VPT_ViT(VisionTransformer):
     def __init__(self, img_size=224, patch_size=16, in_chans=3, num_classes=1000, embed_dim=768, depth=12,
                  num_heads=12, mlp_ratio=4., qkv_bias=True, drop_rate=0., attn_drop_rate=0., drop_path_rate=0.,
@@ -40,6 +42,9 @@ class VPT_ViT(VisionTransformer):
                          drop_path_rate=drop_path_rate, embed_layer=embed_layer,
                          norm_layer=norm_layer, act_layer=act_layer)
                          
+        # ! LoRA
+        self = LoRA_ViT_timm(vit_model=self, r=4).lora_vit
+        
         print('Using VPT model')
         # load basic state_dict
         if basic_state_dict is not None:
