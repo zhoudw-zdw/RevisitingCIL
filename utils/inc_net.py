@@ -571,6 +571,7 @@ class MultiBranchCosineIncrementalNet(BaseNet):
             param.requires_grad = False
 
         self.convnets = nn.ModuleList()
+        
         self.args=args
         
         if 'resnet' in args['convnet_type']:
@@ -635,6 +636,11 @@ class MultiBranchCosineIncrementalNet(BaseNet):
 
         self.convnets.append(tuned_model.convnet) #adappted tuned model
     
+        # ! freeze all convnets for feature extraction
+        for convnet in self.convnets:
+            for param in convnet.parameters():
+                param.requires_grad = False
+                
         self._feature_dim = self.convnets[0].out_dim * len(self.convnets) 
         self.fc=self.generate_fc(self._feature_dim,self.args['init_cls'])
         

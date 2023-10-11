@@ -63,7 +63,7 @@ def _train(args, tag, mode):
         
         # only train to search best hyper-parameters
         if mode=="train":
-            model.incremental_train(data_manager, mode="train")
+            model.incremental_train(data_manager, mode="train", tag=tag)
             break
         
         elif mode=="eval":

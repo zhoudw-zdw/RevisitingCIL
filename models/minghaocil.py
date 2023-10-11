@@ -45,6 +45,7 @@ class Learner(BaseLearner):
         self.args=args
         self.data_augmentation=args['data_augmentation'] if args['data_augmentation'] is not None else 'train'
         self.alpha = args['alpha'] if args['alpha'] is not None else 0.5
+        self.beta = args['beta'] if args['beta'] is not None else 0.001
         self.state_dict = None
 
     def load_checkpoint(self, state_dict):
@@ -116,8 +117,8 @@ class Learner(BaseLearner):
                 # import pdb; pdb.set_trace()
                 embedding = model(data)['features']
                 # embedding=model.convnet(data)
-                embedding_list.append(embedding.cpu())
-                label_list.append(label.cpu())
+                embedding_list.append(embedding.cuda())
+                label_list.append(label.cuda())
                 
         embedding_list = torch.cat(embedding_list, dim=0)
         label_list = torch.cat(label_list, dim=0)
@@ -229,7 +230,8 @@ class Learner(BaseLearner):
 
     def _compute_prototype_loss(self, fc_weights, prototypes):
         # import pdb; pdb.set_trace()
-        loss = ((fc_weights - prototypes) ** 2).sum(1).mean()
+        # loss = ((fc_weights - prototypes) ** 2).sum(1).mean()
+        loss = torch.pow(torch.dist(fc_weights, prototypes, p=2), self.beta)
         return loss
     
     def _compute_loss(self, inputs, targets, proto_tensor=None, ifrot=False) -> torch.Tensor:
@@ -247,10 +249,8 @@ class Learner(BaseLearner):
         if proto_tensor is not None:
             # Compute prototype loss
             proto_loss = self._compute_prototype_loss(self._network.module.fc.weight.data, proto_tensor)                
-            
             # Combine main loss and prototype loss
-            beta = 0.1  # This is a hyperparameter you can tune
-            loss = loss_cls + beta * proto_loss
+            loss = loss_cls + proto_loss
         
         return loss, logits
         
