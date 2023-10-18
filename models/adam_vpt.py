@@ -10,6 +10,7 @@ from torch.utils.data import DataLoader
 from utils.inc_net import IncrementalNet,SimpleCosineIncrementalNet,MultiBranchCosineIncrementalNet,SimpleVitNet
 from models.base import BaseLearner
 from utils.toolkit import target2onehot, tensor2numpy
+from sklearn.preprocessing import StandardScaler
 
 from torchvision.ops.focal_loss import sigmoid_focal_loss
 # tune the model at first session with vpt, and then conduct simple shot.
@@ -40,17 +41,11 @@ class Learner(BaseLearner):
         
     def load_checkpoint(self, state_dict):
         self.state_dict = state_dict
-        # if len(self._multiple_gpus) > 1:
-        #     # replace "module." in state_dict
-        #     for k in list(state_dict["model_state_dict"].keys()):
-        #         if k.startswith("module."):
-        #             state_dict["model_state_dict"][k[7:]] = state_dict["model_state_dict"].pop(k)
         self._network.load_state_dict(state_dict["model_state_dict"], strict=True)
     def after_task(self):
         self._known_classes = self._total_classes
     
     def replace_fc(self,trainloader, model, args):
-        
         model = model.eval()
         embedding_list = []
         label_list = []
@@ -61,7 +56,10 @@ class Learner(BaseLearner):
                 data=data.cuda()
                 label=label.cuda()
                 embedding = model(data)['features']
+                # norm_embedding = F.normalize(embedding, p=2, dim=1)
                 embedding_list.append(embedding.cpu())
+                # embedding_list.append(norm_embedding.cpu())
+                
                 label_list.append(label.cpu())
         embedding_list = torch.cat(embedding_list, dim=0)
         label_list = torch.cat(label_list, dim=0)
@@ -73,13 +71,19 @@ class Learner(BaseLearner):
             data_index=(label_list==class_index).nonzero().squeeze(-1)
             embedding=embedding_list[data_index]
             proto=embedding.mean(0)
+            proto_list.append(proto)
             self._network.fc.weight.data[class_index]=proto
-        return model
 
-
-
-
-    def incremental_train(self, data_manager, mode="train"):
+        # ! Normalization
+        # proto_tensor = torch.stack(proto_list, dim=0)
+        # proto_numpy = proto_tensor.numpy()
+        # scaler = StandardScaler()
+        # scaler.fit(proto_numpy)
+        # norm_proto_np = scaler.transform(proto_numpy)
+        # for i in range(len(class_list)):
+        #     self._network.fc.weight.data[i]=torch.from_numpy(norm_proto_np[i])
+            
+    def incremental_train(self, data_manager, mode="train", tag=None):
         self._cur_task += 1
         self._total_classes = self._known_classes + data_manager.get_task_size(self._cur_task)
         self._network.update_fc(self._total_classes)
@@ -172,6 +176,7 @@ class Learner(BaseLearner):
                     loss = sigmoid_focal_loss(logits, targets_onehot, alpha=0.25, gamma=2.0, reduction="mean")
                 else:
                     raise NotImplementedError
+                
                 optimizer.zero_grad()
                 loss.backward()
                 optimizer.step()

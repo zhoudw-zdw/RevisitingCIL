@@ -2,7 +2,7 @@ import copy
 import logging
 import torch
 from torch import nn
-from convs.linears import SimpleLinear, SplitCosineLinear, CosineLinear
+from convs.linears import SimpleLinear, SplitCosineLinear, CosineLinear, Proxy_Anchor
 import timm
 
 
@@ -57,28 +57,28 @@ def get_convnet(args, pretrained=False):
     
     # VPT
     elif '_vpt' in name:
-        if args["model_name"]=="adam_vpt":
-            from convs.vpt import build_promptmodel
-            if name=="pretrained_vit_b16_224_vpt":
-                basicmodelname="vit_base_patch16_224" 
-            elif name=="pretrained_vit_b16_224_in21k_vpt":
-                basicmodelname="vit_base_patch16_224_in21k"
-            
-            print("modelname,",name,"basicmodelname",basicmodelname)
-            # ! regularize the code !!!
-            # VPT_type="Deep"
-            # if args["vpt_type"]=='shallow':
-            #     VPT_type="Shallow"
-            VPT_type=args["vpt_type"]
-            Prompt_Token_num=args["prompt_token_num"]
+        # if args["model_name"]=="adam_vpt":
+        from convs.vpt import build_promptmodel
+        if name=="pretrained_vit_b16_224_vpt":
+            basicmodelname="vit_base_patch16_224" 
+        elif name=="pretrained_vit_b16_224_in21k_vpt":
+            basicmodelname="vit_base_patch16_224_in21k"
+        
+        print("modelname,",name,"basicmodelname",basicmodelname)
+        # ! regularize the code !!!
+        # VPT_type="Deep"
+        # if args["vpt_type"]=='shallow':
+        #     VPT_type="Shallow"
+        VPT_type=args["vpt_type"]
+        Prompt_Token_num=args["prompt_token_num"]
 
-            model = build_promptmodel(modelname=basicmodelname,  Prompt_Token_num=Prompt_Token_num, VPT_type=VPT_type)
-            prompt_state_dict = model.obtain_prompt()
-            model.load_prompt(prompt_state_dict)
-            model.out_dim=768
-            return model.eval()
-        else:
-            raise NotImplementedError("Inconsistent model name and model type")
+        model = build_promptmodel(modelname=basicmodelname,  Prompt_Token_num=Prompt_Token_num, VPT_type=VPT_type)
+        prompt_state_dict = model.obtain_prompt()
+        model.load_prompt(prompt_state_dict)
+        model.out_dim=768
+        return model.eval()
+        # else:
+        #     raise NotImplementedError("Inconsistent model name and model type")
 
     elif '_adapter' in name:
         ffn_num=args["ffn_num"]
@@ -526,8 +526,18 @@ class SimpleCosineIncrementalNet(BaseNet):
         fc = CosineLinear(in_dim, out_dim)
         return fc
 
+from convs.linears import reduce_proxies
+import loralib as lora
+# from torch.nn import functional as F
 
+class LoRACosineLinear(CosineLinear):
+    def __init__(self, in_features, out_features, nb_proxy=1, to_reduce=False, sigma=True):
+        super().__init__(in_features, out_features, nb_proxy, to_reduce, sigma)
+        self.weight = lora.Linear(in_features, self.out_features, r=16).weight
+    
+    
 class SimpleVitNet(BaseNet):
+
     def __init__(self, args, pretrained):
         super().__init__(args, pretrained)
 
@@ -536,6 +546,7 @@ class SimpleVitNet(BaseNet):
         if self.fc is not None:
             nb_output = self.fc.out_features
             weight = copy.deepcopy(self.fc.weight.data)
+            
             fc.sigma.data = self.fc.sigma.data
             if nextperiod_initialization is not None:
                 weight = torch.cat([weight, nextperiod_initialization])
@@ -547,6 +558,9 @@ class SimpleVitNet(BaseNet):
 
     def generate_fc(self, in_dim, out_dim):
         fc = CosineLinear(in_dim, out_dim)
+        # fc = Proxy_Anchor(in_dim, out_dim)
+        # print('Using LoRACosineLinear')
+        # fc = LoRACosineLinear(in_dim, out_dim)
         return fc
 
     def extract_vector(self, x):
@@ -583,18 +597,21 @@ class MultiBranchCosineIncrementalNet(BaseNet):
         fc = self.generate_fc(self._feature_dim, nb_classes).cuda()
         if self.fc is not None:
             nb_output = self.fc.out_features
+            nb_proxy = self.fc.nb_proxy
             weight = copy.deepcopy(self.fc.weight.data)
             fc.sigma.data = self.fc.sigma.data
             if nextperiod_initialization is not None:
                 weight = torch.cat([weight, nextperiod_initialization])
             else:
-                weight = torch.cat([weight, torch.zeros(nb_classes - nb_output, self._feature_dim).cuda()])
+                weight = torch.cat([weight, torch.zeros(nb_classes - int(nb_output / nb_proxy), self._feature_dim).cuda()])
             fc.weight = nn.Parameter(weight)
         del self.fc
         self.fc = fc
 
     def generate_fc(self, in_dim, out_dim):
         fc = CosineLinear(in_dim, out_dim)
+        # fc = Proxy_Anchor(in_dim, out_dim)
+        # fc = LoRACosineLinear(in_dim, out_dim)
         return fc
     
 

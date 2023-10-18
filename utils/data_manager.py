@@ -77,7 +77,7 @@ class DataManager(object):
             trsf = transforms.Compose(
                 [
                     *self._train_trsf,
-                    transforms.RandomHorizontalFlip(p=flip_prob),
+                    # transforms.RandomHorizontalFlip(p=flip_prob),
                     # transforms.RandomVerticalFlip(p=flip_prob),
                     # transforms.Lambda(lambda x: random_rotation(x)),
                     transforms.ColorJitter(brightness=0.24705882352941178),

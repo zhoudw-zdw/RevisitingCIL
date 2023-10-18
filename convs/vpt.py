@@ -41,9 +41,6 @@ class VPT_ViT(VisionTransformer):
                          qkv_bias=qkv_bias, drop_rate=drop_rate, attn_drop_rate=attn_drop_rate,
                          drop_path_rate=drop_path_rate, embed_layer=embed_layer,
                          norm_layer=norm_layer, act_layer=act_layer)
-                         
-        # ! LoRA
-        self = LoRA_ViT_timm(vit_model=self, r=4).lora_vit
         
         print('Using VPT model')
         # load basic state_dict
@@ -59,7 +56,11 @@ class VPT_ViT(VisionTransformer):
             self.Prompt_Tokens = nn.Parameter(torch.zeros(1, Prompt_Token_num, embed_dim))
         else:
             raise NotImplementedError('VPT_type must be "deep" or "shallow"')
-            
+        
+        # ! LoRA
+        # print('Using LoRA-ViT')
+        # self = LoRA_ViT_timm(vit_model=self, r=4).lora_vit
+        
     def New_CLS_head(self, new_classes=15):
         self.head = nn.Linear(self.embed_dim, new_classes)
 
@@ -67,6 +68,11 @@ class VPT_ViT(VisionTransformer):
         for param in self.parameters():
             param.requires_grad = False
 
+        # for name, param in self.named_parameters():
+        #     # ! Let LoRA work
+        #     if 'qkv.linear' in name:
+        #         param.requires_grad = True
+                
         self.Prompt_Tokens.requires_grad = True
         try:
             for param in self.head.parameters():

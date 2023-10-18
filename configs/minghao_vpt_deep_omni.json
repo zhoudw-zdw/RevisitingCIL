@@ -13,13 +13,13 @@
     "seed": [1993],
     
     "tuned_epoch":20,
-    "init_lr":0.005,
-    "batch_size":768,
+    "init_lr":0.1,
+    "batch_size":720,
     "weight_decay":0.0005,
     "min_lr":0,
     "optimizer":"sgd",
     "vpt_type":"deep",
-    "prompt_token_num":3,
+    "prompt_token_num":5,
     "loss_fn": "cross_entropy"
 }
 
