@@ -10,7 +10,6 @@ from torch.utils.data import DataLoader
 from utils.inc_net import IncrementalNet,SimpleCosineIncrementalNet,MultiBranchCosineIncrementalNet,SimpleVitNet
 from models.base import BaseLearner
 from utils.toolkit import target2onehot, tensor2numpy
-from sklearn.preprocessing import StandardScaler
 
 from torchvision.ops.focal_loss import sigmoid_focal_loss
 # tune the model at first session with vpt, and then conduct simple shot.

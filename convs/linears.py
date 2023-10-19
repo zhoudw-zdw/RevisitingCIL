@@ -106,7 +106,7 @@ class SimpleLinear(nn.Module):
 
 
 class CosineLinear(nn.Module):
-    def __init__(self, in_features, out_features, nb_proxy=6, to_reduce=False, sigma=True):
+    def __init__(self, in_features, out_features, nb_proxy=1, to_reduce=False, sigma=True):
         super(CosineLinear, self).__init__()
         self.in_features = in_features
         self.out_features = out_features * nb_proxy

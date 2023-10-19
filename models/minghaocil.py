@@ -11,7 +11,6 @@ from torch.utils.data import DataLoader
 from utils.inc_net import IncrementalNet,SimpleCosineIncrementalNet,MultiBranchCosineIncrementalNet,SimpleVitNet
 from models.base import BaseLearner
 from utils.toolkit import target2onehot, tensor2numpy, count_parameters
-from sklearn.preprocessing import StandardScaler
 
 from torchvision.ops.focal_loss import sigmoid_focal_loss
 from convs.vpt import build_promptmodel, VPT_ViT
@@ -70,7 +69,7 @@ class Learner(BaseLearner):
         self.args=args
         self.data_augmentation=args['data_augmentation'] if args['data_augmentation'] is not None else 'train'
         self.alpha = args['alpha'] if args['alpha'] is not None else 1
-        self.beta = args['beta'] if args['beta'] is not None else 0
+        self.beta = 0
         self.state_dict = None
         
         if self.beta > 0:
@@ -120,7 +119,6 @@ class Learner(BaseLearner):
             # print('Replacing...',class_index)
             data_index=(label_list==class_index).nonzero().squeeze(-1)
             embedding=embedding_list[data_index]
-            import pdb; pdb.set_trace()
             # ! Randon Noise
             random_index = np.random.choice(embedding.shape[0], size=int(embedding.shape[0] * self.alpha), replace=False)
             random_weight = np.random.uniform(0, 2, len(random_index))
@@ -384,9 +382,11 @@ class Learner(BaseLearner):
                     train_acc,
                     test_acc,
                 )
+            if (epoch+1) in [20,25,30,35]:
+                self.save_checkpoint(f'checkpoints/{self.tag}_epoch{epoch}')
             logging.info(info)
             prog_bar.set_description(info)
         # ! save ckpt
         # self.save_checkpoint(f'checkpoints/minghao_lr({self.init_lr})_wd({self.weight_decay})_opt({self.args["optimizer"]})_vt({self.args["vpt_type"]})_loss({self.loss_fn})_epoch({self.args["tuned_epoch"]})')
-        self.save_checkpoint(f'checkpoints/{self.tag}_epoch({self.args["tuned_epoch"]})')
-        logging.info(info)
+        # self.save_checkpoint(f'checkpoints/{self.tag}_epoch({self.args["tuned_epoch"]})')
+        # logging.info(info)

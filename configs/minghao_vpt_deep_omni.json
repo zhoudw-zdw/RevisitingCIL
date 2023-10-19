@@ -14,7 +14,7 @@
     
     "tuned_epoch":20,
     "init_lr":0.1,
-    "batch_size":720,
+    "batch_size":950,
     "weight_decay":0.0005,
     "min_lr":0,
     "optimizer":"sgd",

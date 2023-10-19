@@ -2,6 +2,9 @@
 *.jpg
 *.pyc
 *.pkl
+*.log
 
 # directories to ignore
 data/
+logs/
+vis/

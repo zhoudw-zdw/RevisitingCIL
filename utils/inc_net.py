@@ -179,6 +179,7 @@ class BaseNet(nn.Module):
         self.convnet = get_convnet(args, pretrained)
         print('After BaseNet initialization.')
         self.fc = None
+        self.nb_proxy = args["nb_proxy"]
 
     @property
     def feature_dim(self):
@@ -557,7 +558,7 @@ class SimpleVitNet(BaseNet):
         self.fc = fc
 
     def generate_fc(self, in_dim, out_dim):
-        fc = CosineLinear(in_dim, out_dim)
+        fc = CosineLinear(in_dim, out_dim, self.nb_proxy)
         # fc = Proxy_Anchor(in_dim, out_dim)
         # print('Using LoRACosineLinear')
         # fc = LoRACosineLinear(in_dim, out_dim)
@@ -609,7 +610,7 @@ class MultiBranchCosineIncrementalNet(BaseNet):
         self.fc = fc
 
     def generate_fc(self, in_dim, out_dim):
-        fc = CosineLinear(in_dim, out_dim)
+        fc = CosineLinear(in_dim, out_dim, self.nb_proxy)
         # fc = Proxy_Anchor(in_dim, out_dim)
         # fc = LoRACosineLinear(in_dim, out_dim)
         return fc
