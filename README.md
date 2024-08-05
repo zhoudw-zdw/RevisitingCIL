@@ -3,12 +3,13 @@
 
 <div>
     <a href='http://www.lamda.nju.edu.cn/zhoudw' target='_blank'>Da-Wei Zhou</a><sup>1</sup>&emsp;
+    <a href='http://www.lamda.nju.edu.cn/caizw' target='_blank'>Zi-Wen Cai</a><sup>1</sup>&emsp;
     <a href='http://www.lamda.nju.edu.cn/yehj' target='_blank'>Han-Jia Ye</a><sup>1</sup>&emsp;
     <a href='http://www.lamda.nju.edu.cn/zhandc' target='_blank'>De-Chuan Zhan</a><sup>1</sup>&emsp;
     <a href='https://liuziwei7.github.io/' target='_blank'>Ziwei Liu </a><sup>2</sup>
 </div>
 <div>
-<sup>1</sup>State Key Laboratory for Novel Software Technology, Nanjing University&emsp;
+<sup>1</sup>School of Artificial Intelligence, State Key Laboratory for Novel Software Technology, Nanjing University&emsp;
 
 <sup>2</sup>S-Lab, Nanyang Technological University&emsp;
 </div>
@@ -28,6 +29,8 @@ The code repository for "[Revisiting Class-Incremental Learning with Pre-Trained
 
 
 ## Updates
+[08/2024] Accepted to IJCV.
+
 [03/2023] [arXiv](http://arxiv.org/abs/2303.07338) paper has been released.
 
 [03/2023] Code has been released.
