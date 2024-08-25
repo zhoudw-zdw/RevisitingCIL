@@ -1,0 +1,26 @@
+{
+    "prefix": "exp",
+    "dataset": "cifar224",
+    "memory_size": 2000,
+    "memory_per_class": 20,
+    "fixed_memory": false,
+    "shuffle": true,
+    "init_cls": 5,
+    "increment": 5,
+    "model_name": "aper_ssf",
+    "convnet_type": "pretrained_vit_b16_224_in21k_ssf",
+    "weight_decay":0.0005,
+    "prompt_token_num": 30,
+    "ffn_num": 64,
+    "optimizer": "sgd",
+    "min_lr": 0,
+    "device": [
+        "0"
+    ],
+    "seed": [
+        1993
+    ],
+    "tuned_epoch": 20,
+    "init_lr": 0.01,
+    "batch_size": 48
+}

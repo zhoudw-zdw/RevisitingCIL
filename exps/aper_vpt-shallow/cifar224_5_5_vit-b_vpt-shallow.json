@@ -1,0 +1,26 @@
+{
+    "prefix": "exp_vpt-shallow",
+    "dataset": "cifar224",
+    "memory_size": 2000,
+    "memory_per_class": 20,
+    "fixed_memory": false,
+    "shuffle": true,
+    "init_cls": 5,
+    "increment": 5,
+    "model_name": "aper_vpt",
+    "convnet_type": "pretrained_vit_b16_224_in21k_vpt",
+    "weight_decay":0.0005,
+    "vpt_type":"shallow",
+    "prompt_token_num":5,
+    "min_lr": 0,
+    "optimizer": "sgd",
+    "device": [
+        "0"
+    ],
+    "seed": [
+        1993
+    ],
+    "tuned_epoch": 20,
+    "init_lr": 0.01,
+    "batch_size": 48
+}

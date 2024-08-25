@@ -43,7 +43,20 @@ def get_convnet(args, pretrained=False):
     
     # SSF 
     elif '_ssf' in name:
-        if args["model_name"]=="adam_ssf":
+        if args["model_name"]=="aper_ssf":
+            if 'resnet' in name:
+                from convs import resnet_scale
+                if name=="pretrained_resnet18_ssf":
+                    model = resnet_scale.resnet18_scale(pretrained=False, args=args)
+                    model.load_state_dict(torch.load("./pretrained_models/resnet18-f37072fd.pth"),strict=False)
+                elif name=="pretrained_resnet50_ssf":
+                    model = resnet_scale.resnet50_scale(pretrained=False, args=args)
+                    model.load_state_dict(torch.load("./pretrained_models/resnet50-11ad3fa6.pth"),strict=False)
+                elif name=="pretrained_resnet101_ssf":
+                    model = resnet_scale.resnet101_scale(pretrained=False, args=args)
+                    model.load_state_dict(torch.load("./pretrained_models/resnet101-cd907fc2.pth"),strict=False)
+                return model.eval()
+
             from convs import vision_transformer_ssf
             if name=="pretrained_vit_b16_224_ssf":
                 model = timm.create_model("vit_base_patch16_224_ssf", pretrained=True, num_classes=0)
@@ -57,7 +70,7 @@ def get_convnet(args, pretrained=False):
     
     # VPT
     elif '_vpt' in name:
-        if args["model_name"]=="adam_vpt":
+        if args["model_name"]=="aper_vpt":
             from convs.vpt import build_promptmodel
             if name=="pretrained_vit_b16_224_vpt":
                 basicmodelname="vit_base_patch16_224" 
@@ -80,7 +93,7 @@ def get_convnet(args, pretrained=False):
 
     elif '_adapter' in name:
         ffn_num=args["ffn_num"]
-        if args["model_name"]=="adam_adapter" :
+        if args["model_name"]=="aper_adapter" :
             from convs import vision_transformer_adapter
             from easydict import EasyDict
             tuning_config = EasyDict(
