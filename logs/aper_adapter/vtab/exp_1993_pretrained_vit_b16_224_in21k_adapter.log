@@ -1,0 +1,68 @@
+2024-08-25 10:36:27,657 [trainer.py] => config: exps/aper_adapter/vtab_10_10_vit-b_adapter.json
+2024-08-25 10:36:27,657 [trainer.py] => prefix: exp
+2024-08-25 10:36:27,657 [trainer.py] => dataset: vtab
+2024-08-25 10:36:27,657 [trainer.py] => memory_size: 2000
+2024-08-25 10:36:27,657 [trainer.py] => memory_per_class: 20
+2024-08-25 10:36:27,657 [trainer.py] => fixed_memory: False
+2024-08-25 10:36:27,657 [trainer.py] => shuffle: False
+2024-08-25 10:36:27,657 [trainer.py] => init_cls: 10
+2024-08-25 10:36:27,657 [trainer.py] => increment: 10
+2024-08-25 10:36:27,657 [trainer.py] => model_name: aper_adapter
+2024-08-25 10:36:27,657 [trainer.py] => convnet_type: pretrained_vit_b16_224_in21k_adapter
+2024-08-25 10:36:27,657 [trainer.py] => weight_decay: 0.0005
+2024-08-25 10:36:27,658 [trainer.py] => prompt_token_num: 30
+2024-08-25 10:36:27,658 [trainer.py] => ffn_num: 64
+2024-08-25 10:36:27,658 [trainer.py] => optimizer: sgd
+2024-08-25 10:36:27,658 [trainer.py] => min_lr: 0
+2024-08-25 10:36:27,658 [trainer.py] => device: [device(type='cuda', index=0)]
+2024-08-25 10:36:27,658 [trainer.py] => seed: 1993
+2024-08-25 10:36:27,658 [trainer.py] => tuned_epoch: 20
+2024-08-25 10:36:27,658 [trainer.py] => init_lr: 0.01
+2024-08-25 10:36:27,658 [trainer.py] => batch_size: 48
+2024-08-25 10:36:27,711 [data_manager.py] => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49]
+2024-08-25 10:36:30,879 [trainer.py] => All params: 86988288
+2024-08-25 10:36:30,880 [trainer.py] => Trainable params: 1189632
+2024-08-25 10:36:34,535 [aper_adapter.py] => Learning on 0-10
+2024-08-25 10:38:07,700 [aper_adapter.py] => Task 0, Epoch 20/20 => Loss 2.041, Train_accy 61.09, Test_accy 55.80
+2024-08-25 10:38:20,898 [trainer.py] => No NME accuracy.
+2024-08-25 10:38:20,898 [trainer.py] => CNN: {'total': 87.6, '00-09': 87.6, 'old': 0, 'new': 87.6}
+2024-08-25 10:38:20,898 [trainer.py] => CNN top1 curve: [87.6]
+2024-08-25 10:38:20,898 [trainer.py] => CNN top5 curve: [98.8]
+
+2024-08-25 10:38:20,898 [trainer.py] => Average Accuracy (CNN): 87.6
+2024-08-25 10:38:20,900 [trainer.py] => All params: 172802305
+2024-08-25 10:38:20,901 [trainer.py] => Trainable params: 87003649
+2024-08-25 10:38:20,905 [aper_adapter.py] => Learning on 10-20
+2024-08-25 10:38:32,082 [trainer.py] => No NME accuracy.
+2024-08-25 10:38:32,082 [trainer.py] => CNN: {'total': 86.07, '00-09': 87.6, '10-19': 82.25, 'old': 87.6, 'new': 82.25}
+2024-08-25 10:38:32,082 [trainer.py] => CNN top1 curve: [87.6, 86.07]
+2024-08-25 10:38:32,082 [trainer.py] => CNN top5 curve: [98.8, 98.14]
+
+2024-08-25 10:38:32,082 [trainer.py] => Average Accuracy (CNN): 86.835
+2024-08-25 10:38:32,084 [trainer.py] => All params: 172817665
+2024-08-25 10:38:32,085 [trainer.py] => Trainable params: 87019009
+2024-08-25 10:38:32,091 [aper_adapter.py] => Learning on 20-30
+2024-08-25 10:38:47,168 [trainer.py] => No NME accuracy.
+2024-08-25 10:38:47,168 [trainer.py] => CNN: {'total': 89.14, '00-09': 87.6, '10-19': 81.0, '20-29': 94.01, 'old': 85.71, 'new': 94.01}
+2024-08-25 10:38:47,168 [trainer.py] => CNN top1 curve: [87.6, 86.07, 89.14]
+2024-08-25 10:38:47,168 [trainer.py] => CNN top5 curve: [98.8, 98.14, 98.66]
+
+2024-08-25 10:38:47,168 [trainer.py] => Average Accuracy (CNN): 87.60333333333334
+2024-08-25 10:38:47,170 [trainer.py] => All params: 172833025
+2024-08-25 10:38:47,171 [trainer.py] => Trainable params: 87034369
+2024-08-25 10:38:47,175 [aper_adapter.py] => Learning on 30-40
+2024-08-25 10:39:26,550 [trainer.py] => No NME accuracy.
+2024-08-25 10:39:26,550 [trainer.py] => CNN: {'total': 82.72, '00-09': 87.5, '10-19': 80.75, '20-29': 94.01, '30-39': 79.93, 'old': 89.06, 'new': 79.93}
+2024-08-25 10:39:26,550 [trainer.py] => CNN top1 curve: [87.6, 86.07, 89.14, 82.72]
+2024-08-25 10:39:26,550 [trainer.py] => CNN top5 curve: [98.8, 98.14, 98.66, 98.18]
+
+2024-08-25 10:39:26,550 [trainer.py] => Average Accuracy (CNN): 86.3825
+2024-08-25 10:39:26,552 [trainer.py] => All params: 172848385
+2024-08-25 10:39:26,554 [trainer.py] => Trainable params: 87049729
+2024-08-25 10:39:26,555 [aper_adapter.py] => Learning on 40-50
+2024-08-25 10:39:52,382 [trainer.py] => No NME accuracy.
+2024-08-25 10:39:52,382 [trainer.py] => CNN: {'total': 84.35, '00-09': 87.5, '10-19': 80.25, '20-29': 94.01, '30-39': 79.93, '40-49': 99.76, 'old': 82.7, 'new': 99.76}
+2024-08-25 10:39:52,382 [trainer.py] => CNN top1 curve: [87.6, 86.07, 89.14, 82.72, 84.35]
+2024-08-25 10:39:52,382 [trainer.py] => CNN top5 curve: [98.8, 98.14, 98.66, 98.18, 98.33]
+
+2024-08-25 10:39:52,382 [trainer.py] => Average Accuracy (CNN): 85.976

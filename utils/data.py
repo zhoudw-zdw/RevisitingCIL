@@ -292,8 +292,8 @@ class vtab(iData):
 
     def download_data(self):
         # assert 0, "You should specify the folder of your dataset"
-        train_dir = "./data/vtab-cil/vtab/train/"
-        test_dir = "./data/vtab-cil/vtab/test/"
+        train_dir = "./data/vtab/train/"
+        test_dir = "./data/vtab/test/"
 
         train_dset = datasets.ImageFolder(train_dir)
         test_dset = datasets.ImageFolder(test_dir)

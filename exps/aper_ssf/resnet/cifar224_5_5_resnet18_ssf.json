@@ -1,0 +1,23 @@
+{
+    "prefix": "exp",
+    "dataset": "cifar224",
+    "memory_size": 2000,
+    "memory_per_class": 20,
+    "fixed_memory": false,
+    "shuffle": true,
+    "init_cls": 5,
+    "increment": 5,
+    "model_name": "aper_ssf",
+    "convnet_type": "pretrained_resnet18_ssf",
+    "optimizer": "sgd",
+    "min_lr": 0,
+    "device": [
+        "0"
+    ],
+    "seed": [
+        1993
+    ],
+    "tuned_epoch": 10,
+    "init_lr": 0.01,
+    "batch_size": 192
+}
