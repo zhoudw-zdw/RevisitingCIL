@@ -37,6 +37,8 @@ The code repository for "[Revisiting Class-Incremental Learning with Pre-Trained
 
 
 ## 📢 Updates
+[08/2024] Update all training jsons and logs.
+
 [08/2024] Accepted to IJCV.
 
 [03/2023] [arXiv](http://arxiv.org/abs/2303.07338) paper has been released.
